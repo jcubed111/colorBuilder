@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Color Builder</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://kit.fontawesome.com/cd119a715d.js"></script>
+</head>
+<body>
+    <div id="sliderArea">
+        <div id="mainInput">
+            <div class="textInputWrapper hex">
+                <input id='hexInput' type="text" value="#58fd63"  autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+                <div class="button copyButton"><i class="fal fa-copy"></i></div>
+                <div class="button pasteButton"><i class="fal fa-paste"></i></div>
+            </div>
+            <div class="textInputWrapper rgb">
+                <input id='rgbInput' type="text" value="rgba(15, 485, 15, 0.5)"  autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+                <div class="button copyButton"><i class="fal fa-copy"></i></div>
+                <div class="button pasteButton"><i class="fal fa-paste"></i></div>
+            </div>
+            <div class="textInputWrapper hsl">
+                <input id='hslInput' type="text" value="hsla(15, 23, 65, 0.2)"  autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+                <div class="button copyButton"><i class="fal fa-copy"></i></div>
+                <div class="button pasteButton"><i class="fal fa-paste"></i></div>
+            </div>
+        </div>
+        <div id="mainColorDisplay">
+            <div class="inner">
+                <div class="solid"></div>
+                <div class="alpha"></div>
+            </div>
+        </div>
+        <div id="satValSlider">
+            <div class="sliderOuter">
+                <div class="sliderInner"></div>
+                <div class="sliderMarker"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <template id="sliderTemplate">
+         <div class="vbar">
+            <div class="topperOuter"><div class="topper"></div></div>
+            <div class="sliderOuter">
+                <div class="sliderInner"></div>
+                <div class="sliderMarker"></div>
+            </div>
+            <div class="numberWrapper">
+                <input class="numberBox" />
+                <div class="arrowWrapper">
+                    <div class="arrow arrowUp">&#11205;</div>
+                    <div class="arrow arrowDown">&#11206;</div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <script src="utils.js"></script>
+    <script src="Color.js"></script>
+    <script src="Sliders.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>

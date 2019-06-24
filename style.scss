@@ -1,0 +1,298 @@
+@import url('https://fonts.googleapis.com/css?family=Inconsolata:400,700&display=swap');
+
+*{
+    box-sizing: border-box;
+}
+
+body{
+    background: #181818;
+}
+
+#sliderArea{
+    // display: flex;
+    // flex-direction: row;
+    // align-items: flex-end;
+    display: grid;
+    grid-template-rows: 1fr auto auto auto;
+    justify-content: right;
+
+    .view-HueSlider{
+        grid-column: 4 / 5;
+        grid-row: 1 / 3;
+    }
+    .view-SatSlider{
+        grid-column: 2 / 3;
+        grid-row: 2 / 3;
+    }
+    .view-ValSlider{
+        grid-column: 3 / 4;
+        grid-row: 2 / 3;
+    }
+    .view-RedSlider{
+        grid-column: 1 / 2;
+        grid-row: 3 / 4;
+    }
+    .view-GreenSlider{
+        grid-column: 2 / 3;
+        grid-row: 3 / 4;
+    }
+    .view-BlueSlider{
+        grid-column: 3 / 4;
+        grid-row: 3 / 4;
+    }
+    .view-AlphaSlider{
+        grid-column: 4 / 5;
+        grid-row: 3 / 4;
+    }
+    #mainInput{
+        grid-column: 1 / 5;
+        grid-row: 4 / 5;
+    }
+    #mainColorDisplay{
+        grid-column: 1 / 2;
+        grid-row: 2 / 3;
+    }
+    #satValSlider{
+        grid-column: 1 / 4;
+        grid-row: 1 / 2;
+    }
+}
+
+
+input{
+    margin: 0;
+    border: 1px solid #000;
+    box-sizing: border-box;
+    background: #181818;
+    color: #aaa;
+    font-size: 21px;
+    font-family: Inconsolata, monospace;
+    padding: 5px 0px 5px 8px;
+    letter-spacing: 1px;
+}
+
+%sliderBlock{
+    border-radius: 8px;
+    border: 1px solid #000;
+    background: #222;
+    padding: 5px;
+}
+
+.vbar{
+    @extend %sliderBlock;
+    width: 90px;
+    display: flex;
+    flex-direction: column;
+
+    .topperOuter,
+    .numberWrapper{
+        border-radius: 4px;
+        overflow: hidden;
+        height: 42px;
+        flex-grow: 0;
+        flex-shrink: 0;
+        border: 1px solid #000;
+    }
+
+    .sliderOuter{
+        $vMargin: 12px;
+        // height: 256px + $vMargin*2;
+        padding: $vMargin 0;
+        position: relative;
+
+        .sliderInner{
+            box-sizing: content-box;
+            height: 256px;
+            background: linear-gradient(#ff0000, #000000);
+            //position: absolute;
+            border: 1px solid #000;
+            top: $vMargin - 1px;
+            left: 3px;
+            right: 3px;
+            border-radius: 3px;
+        }
+
+        .sliderMarker{
+            box-sizing: content-box;
+            position: absolute;
+            left: 0px;
+            right: 0px;
+            margin-top: $vMargin - 7px;
+            top: 180px;
+            height: 1px;
+            border: 7px solid #ccc;
+            background: transparent;
+            border-top-color: transparent;
+            border-bottom-color: transparent;
+        }
+    }
+
+    .topperOuter{
+        background-image: url(checkers.png);
+
+        .topper{
+            background-color: rgb(75, 0, 0);
+            width: 100%;
+            height: 100%;
+        }
+    }
+
+    .numberWrapper{
+        display: flex;
+
+        .numberBox{
+            border: 0px none;
+            width: 0px;
+            flex-shrink: 1;
+            flex-grow: 1;
+            padding-right: 0;
+        }
+
+        .arrowWrapper{
+            display: flex;
+            flex-direction: column;
+        }
+        .arrow{
+            padding: 10px 3px 0;
+            line-height: 0;
+            flex-grow: 1;
+            flex-shrink: 1;
+            background: #333;
+            color: #aaa;
+            font-size: 14px;
+            text-align: center;
+            cursor: pointer;
+
+            &:hover{
+                background: #555;
+            }
+
+            &:active{
+                background: #181818;
+            }
+        }
+
+        .arrowUp{
+            border-bottom: 1px solid #000;
+        }
+    }
+}
+
+#mainInput{
+    @extend %sliderBlock;
+    width: auto;
+
+    .textInputWrapper{
+        display: flex;
+        flex-direction: row;
+        border-radius: 4px;
+        overflow: hidden;
+        border: 1px solid #000;
+        &:not(:last-child) {
+            margin-bottom: 5px;
+        }
+
+        input{
+            border: 0px none;
+            flex-grow: 1;
+        }
+
+        .button{
+            padding: 5px 8px 0;
+            background: #333;
+            color: #aaa;
+            font-size: 20px;
+            text-align: center;
+            cursor: pointer;
+            border-left: 1px solid #000;
+
+            &:hover{
+                background: #555;
+            }
+
+            &:active{
+                background: #181818;
+            }
+        }
+    }
+}
+
+#mainColorDisplay{
+    @extend %sliderBlock;
+    display: flex;
+
+    .inner{
+        display: flex;
+        flex-direction: column;
+        border-radius: 4px;
+        overflow: hidden;
+        border: 1px solid #000;
+        background: url(checkers.png);
+        flex-grow: 1;
+
+        .solid, .alpha{
+            flex-grow: 1;
+        }
+    }
+}
+
+#satValSlider{
+    @extend %sliderBlock;
+    display: flex;
+    padding: 16px;
+
+    .sliderOuter{
+        width: 100%;
+        height: 100%;
+        border: 1px solid #000;
+        position: relative;
+
+        .sliderInner{
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            background-image: linear-gradient(#0000, #000), linear-gradient(to right, #fff, #fff0);
+            background-color: #f00;
+        }
+
+        .sliderMarker{
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            left: 50px;
+            top: 50px;
+            margin-top: -1px;
+            margin-left: -1px;
+
+            border-color: #fff;
+
+            $crossHairRadius: 6px;
+            $crossHairMargin: 2px;
+
+            &:before{
+                content: '';
+                position: absolute;
+                top: 0;
+                left: - $crossHairRadius - $crossHairMargin;
+                width: 2px + 2*$crossHairMargin;
+                height: 2px;
+                border-left: $crossHairRadius solid #fff;
+                border-right: $crossHairRadius solid #fff;
+                border-color: inherit;
+            }
+            &:after{
+                content: '';
+                position: absolute;
+                top: - $crossHairRadius - $crossHairMargin;
+                left: 0;
+                width: 2px;
+                height: 2px + 2*$crossHairMargin;
+                border-top: $crossHairRadius solid #fff;
+                border-bottom: $crossHairRadius solid #fff;
+                border-color: inherit;
+            }
+        }
+    }
+}
