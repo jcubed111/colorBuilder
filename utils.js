@@ -5,6 +5,7 @@ function formatDecimal(n, digits) {
 function rgb(r, g, b, a=255) {
     return 'rgba(' + [r, g, b].map(a => ~~a).join(',') + ',' + (a/255) + ')';
 }
+
 function hsv(h, s, v, a=255) {
     const l = (v - v*s/200);
     const newS = (l == 0 || l == 100) ? 0 : 100 * (v - l) / Math.min(l, 100 - l);
@@ -14,6 +15,7 @@ function hsv(h, s, v, a=255) {
 function hex(r, g, b, a=255) {
     return '#' + [r, g, b, a].map(v => v.toString(16).padStart(2, '0')).join('').replace(/ff$/, '').toLowerCase();
 }
+
 function prettyRgb(r, g, b, a=255) {
     if(a == 255) {
         return 'rgb(' + [r, g, b].map(a => ~~a).join(', ') + ')';
@@ -21,6 +23,7 @@ function prettyRgb(r, g, b, a=255) {
         return 'rgba(' + [r, g, b].map(a => ~~a).join(', ') + ', ' + formatDecimal(a/255, 2) + ')';
     }
 }
+
 function prettyHsv(h, s, v, a=255) {
     const l = (v - v*s/200);
     const newS = (l == 0 || l == 100) ? 0 : 100 * (v - l) / Math.min(l, 100 - l);
