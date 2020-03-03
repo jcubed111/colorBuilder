@@ -4,8 +4,19 @@
     box-sizing: border-box;
 }
 
+html{
+    min-height: 100%;
+}
+
 body{
     background: #181818;
+    margin: 0;
+    min-height: 100%;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
 }
 
 #sliderArea{
@@ -295,4 +306,118 @@ input{
             }
         }
     }
+}
+
+#gradientController{
+    position: absolute;
+    left: 50px;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 15px 0;
+    background: #181818;
+
+    .gradientSwatch{
+        height: 150px;
+        width: 150px;
+        border-radius: 8px;
+        // flex-grow: 1;
+        flex-shrink: 1;
+        position: relative;
+        background-image: url(checkers.png);
+
+        $addBeforeAfterRadius: 20px;
+        .addBefore,
+        .addAfter,
+        .duplicate,
+        .delete{
+            position: absolute;
+            left: 25%;
+            right: 25%;
+            height: $addBeforeAfterRadius*2;
+            text-align: center;
+            cursor: pointer;
+            z-index: 3;
+            padding: 8px;
+            font-size: 23px;
+            color: #fff0;
+            transition: color 0.2s;
+
+            &:hover{
+                color: #ffff;
+            }
+
+            &:before{
+                content: "";
+                z-index: -1;
+                position: absolute;
+                top: $addBeforeAfterRadius;
+                bottom: $addBeforeAfterRadius;
+                left: 0;
+                right: 0;
+                background: #181818;
+                transition: top ease-in 0.15s, bottom ease-in 0.15s;
+                border-radius: 5px;
+            }
+
+            &:hover:before{
+                top: 0px;
+                bottom: 0px;
+                transition: top ease-out 0.15s, bottom ease-out 0.15s;
+            }
+        }
+
+        &:hover .addBefore,
+        &:hover .addAfter,
+        &:hover .duplicate,
+        &:hover .delete{ color: #fff3; }
+
+        .addBefore{ top: -$addBeforeAfterRadius; }
+        .addAfter{ bottom: -$addBeforeAfterRadius; }
+        &:not(:last-child) .addAfter{ display: none; }
+        .duplicate{
+            left: -$addBeforeAfterRadius;
+            width: 2*$addBeforeAfterRadius;
+            top: 50%;
+            bottom: auto;
+            margin-top: -$addBeforeAfterRadius;
+        }
+
+        &:only-child .delete{
+            display: none;
+        }
+        .delete{
+            right: -$addBeforeAfterRadius;
+            left: auto;
+            width: 2*$addBeforeAfterRadius;
+            top: 50%;
+            bottom: auto;
+            margin-top: -$addBeforeAfterRadius;
+        }
+
+        &:not(.active) .isActive{
+            display: none;
+        }
+        .isActive{
+            position: absolute;
+            left: 8px;
+            top: 8px;
+            font-size: 20px;
+        }
+    }
+}
+#gradientController .gradientSwatch:hover + .gradientSwatch .addBefore{
+    color: #fff3;
+}
+
+#randomCanvas{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+    background: url(checkers.png);
 }

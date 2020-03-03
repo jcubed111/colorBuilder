@@ -12,7 +12,7 @@ function hsv(h, s, v, a=255) {
 }
 
 function hex(r, g, b, a=255) {
-    return '#' + [r, g, b, a].map(v => v.toString(16).padStart(2, '0')).join('').replace(/ff$/, '').toUpperCase();
+    return '#' + [r, g, b, a].map(v => v.toString(16).padStart(2, '0')).join('').replace(/ff$/, '').toLowerCase();
 }
 function prettyRgb(r, g, b, a=255) {
     if(a == 255) {

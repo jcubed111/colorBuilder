@@ -1,14 +1,20 @@
 class Model{
     constructor() {
-        this.changeListeners = [];
+        this._changeListeners = [];
+        this._nextId = 1;
     }
 
     onChange(cb) {
-        this.changeListeners.push(cb);
+        this._changeListeners.push([cb, this._nextId]);
+        return this._nextId++;
+    }
+
+    offChange(offId) {
+        this._changeListeners = this._changeListeners.filter(([cb, id]) => id != offId);
     }
 
     triggerChange() {
-        this.changeListeners.forEach(cb => cb(this));
+        this._changeListeners.forEach(([cb, id]) => cb(this));
     }
 }
 
@@ -17,6 +23,13 @@ class Color extends Model{
         super();
         this.isRgb = true;
         this.value = [0, 0, 0, 255];
+    }
+
+    clone() {
+        let c = new Color();
+        c.isRgb = this.isRgb;
+        c.value = this.value.slice();
+        return c;
     }
 
     r() { return this._asRgb()[0]; }
@@ -120,4 +133,43 @@ class Color extends Model{
             return [...withoutM.map(v => v + m).map(v => v*255).map(Math.round), a];
         }
     }
+
+    toString() {
+        return rgb(...this._asRgb());
+    }
+
+    getTextColor() {
+        // return a contrasting color for text on top of this color
+        return this.v() - 0.5*this.s() > 35 ? '#000' : '#fff';
+    }
 };
+
+class ColorPointer extends Color{
+    constructor() {
+        super();
+        this.off = () => {};
+    }
+
+    pointTo(to) {
+        this.off();
+        this.to = to;
+        const onChangeCb = (...args) => {
+            this.isRgb = this.to.isRgb;
+            this.value = this.to.value.slice();
+            this.triggerChange(...args);
+        };
+        let toCbId = this.to.onChange(onChangeCb);
+        this.off = _ => {
+            this.to.offChange(toCbId);
+        };
+        onChangeCb();
+    }
+
+    setR(...args) { return this.to.setR(...args); }
+    setG(...args) { return this.to.setG(...args); }
+    setB(...args) { return this.to.setB(...args); }
+    setH(...args) { return this.to.setH(...args); }
+    setS(...args) { return this.to.setS(...args); }
+    setV(...args) { return this.to.setV(...args); }
+    setA(...args) { return this.to.setA(...args); }
+}

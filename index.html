@@ -39,6 +39,9 @@
 
     </div>
 
+    <div id="gradientController"></div>
+    <canvas id="randomCanvas"></canvas>
+
     <template id="sliderTemplate">
          <div class="vbar">
             <div class="topperOuter"><div class="topper"></div></div>
@@ -56,9 +59,21 @@
         </div>
     </template>
 
+    <template id="gradientSwatch">
+        <div class="gradientSwatch">
+            <div class="addBefore"><i class="fal fa-plus-square"></i></div>
+            <div class="addAfter"><i class="fal fa-plus-square"></i></div>
+            <div class="isActive"><i class="fal fa-pen"></i></div>
+            <div class="duplicate"><i class="fal fa-clone"></i></div>
+            <div class="delete"><i class="fal fa-trash"></i></div>
+        </div>
+    </template>
+
     <script src="utils.js"></script>
     <script src="Color.js"></script>
+    <script src="View.js"></script>
     <script src="Sliders.js"></script>
+    <script src="GradientController.js"></script>
     <script src="main.js"></script>
 </body>
 </html>

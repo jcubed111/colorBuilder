@@ -3,8 +3,19 @@
   box-sizing: border-box;
 }
 
+html {
+  min-height: 100%;
+}
+
 body {
   background: #181818;
+  margin: 0;
+  min-height: 100%;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }
 
 #sliderArea {
@@ -255,6 +266,124 @@ input {
   border-top: 6px solid #fff;
   border-bottom: 6px solid #fff;
   border-color: inherit;
+}
+
+#gradientController {
+  position: absolute;
+  left: 50px;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 15px 0;
+  background: #181818;
+}
+#gradientController .gradientSwatch {
+  height: 150px;
+  width: 150px;
+  border-radius: 8px;
+  flex-shrink: 1;
+  position: relative;
+  background-image: url(checkers.png);
+}
+#gradientController .gradientSwatch .addBefore,
+#gradientController .gradientSwatch .addAfter,
+#gradientController .gradientSwatch .duplicate,
+#gradientController .gradientSwatch .delete {
+  position: absolute;
+  left: 25%;
+  right: 25%;
+  height: 40px;
+  text-align: center;
+  cursor: pointer;
+  z-index: 3;
+  padding: 8px;
+  font-size: 23px;
+  color: #fff0;
+  transition: color 0.2s;
+}
+#gradientController .gradientSwatch .addBefore:hover,
+#gradientController .gradientSwatch .addAfter:hover,
+#gradientController .gradientSwatch .duplicate:hover,
+#gradientController .gradientSwatch .delete:hover {
+  color: #ffff;
+}
+#gradientController .gradientSwatch .addBefore:before,
+#gradientController .gradientSwatch .addAfter:before,
+#gradientController .gradientSwatch .duplicate:before,
+#gradientController .gradientSwatch .delete:before {
+  content: "";
+  z-index: -1;
+  position: absolute;
+  top: 20px;
+  bottom: 20px;
+  left: 0;
+  right: 0;
+  background: #181818;
+  transition: top ease-in 0.15s, bottom ease-in 0.15s;
+  border-radius: 5px;
+}
+#gradientController .gradientSwatch .addBefore:hover:before,
+#gradientController .gradientSwatch .addAfter:hover:before,
+#gradientController .gradientSwatch .duplicate:hover:before,
+#gradientController .gradientSwatch .delete:hover:before {
+  top: 0px;
+  bottom: 0px;
+  transition: top ease-out 0.15s, bottom ease-out 0.15s;
+}
+#gradientController .gradientSwatch:hover .addBefore, #gradientController .gradientSwatch:hover .addAfter, #gradientController .gradientSwatch:hover .duplicate, #gradientController .gradientSwatch:hover .delete {
+  color: #fff3;
+}
+#gradientController .gradientSwatch .addBefore {
+  top: -20px;
+}
+#gradientController .gradientSwatch .addAfter {
+  bottom: -20px;
+}
+#gradientController .gradientSwatch:not(:last-child) .addAfter {
+  display: none;
+}
+#gradientController .gradientSwatch .duplicate {
+  left: -20px;
+  width: 40px;
+  top: 50%;
+  bottom: auto;
+  margin-top: -20px;
+}
+#gradientController .gradientSwatch:only-child .delete {
+  display: none;
+}
+#gradientController .gradientSwatch .delete {
+  right: -20px;
+  left: auto;
+  width: 40px;
+  top: 50%;
+  bottom: auto;
+  margin-top: -20px;
+}
+#gradientController .gradientSwatch:not(.active) .isActive {
+  display: none;
+}
+#gradientController .gradientSwatch .isActive {
+  position: absolute;
+  left: 8px;
+  top: 8px;
+  font-size: 20px;
+}
+
+#gradientController .gradientSwatch:hover + .gradientSwatch .addBefore {
+  color: #fff3;
+}
+
+#randomCanvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+  background: url(checkers.png);
 }
 
 /*# sourceMappingURL=style.css.map */

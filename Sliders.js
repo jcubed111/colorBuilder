@@ -1,14 +1,3 @@
-class View{
-    constructor() {
-        this.el = this.el();
-        this.el.classList.add('view-' + this.constructor.name);
-    }
-
-    $(s) {
-        return this.el.querySelector(s);
-    }
-}
-
 class RGBSlider extends View{
     el() {
         return document.importNode(document.getElementById('sliderTemplate').content, true).children[0];
@@ -292,8 +281,7 @@ class SatValSlider extends RGBSlider{
     }
 
     setBackgrounds() {
-        let [s, v] = this.getValue();
-        this.$sliderMarker.style.borderColor = s < 50 && v > 50 ? '#000' : '#fff';
+        this.$sliderMarker.style.borderColor = this.targetColor.getTextColor();
         this.$sliderInner.style.backgroundColor = hsv(this.targetColor.h(), 100, 100);
     }
 }
@@ -355,14 +343,14 @@ class InputView extends View{
                     this.targetColor.setR(nums[0]);
                     this.targetColor.setG(nums[1]);
                     this.targetColor.setB(nums[2]);
-                    this.targetColor.setA(nums[2]);
+                    this.targetColor.setA(nums[3]);
                 }else if(v.match(/#?[0-9a-f]{3,4}/i)) {
                     let [, ...nums] = v.trim().match(/^#?([0-9a-f])([0-9a-f])([0-9a-f])([0-9a-f])?$/i);
                     nums = nums.map(n => n || "f").map(n => parseInt(n+n, 16));
                     this.targetColor.setR(nums[0]);
                     this.targetColor.setG(nums[1]);
                     this.targetColor.setB(nums[2]);
-                    this.targetColor.setA(nums[2]);
+                    this.targetColor.setA(nums[3]);
                 }else if(v.match(/hsl/)) {
                     let [, h, s, l, , a] = v.replace(/\s/g, '').match(/^rgba?\(([0-9]+),([0-9.]+)%?,([0-9.]+)%?(,([0-9.]+)%?)?\)$/);
                     let v = +l + s*Math.min(+l, 100-l)/100;
