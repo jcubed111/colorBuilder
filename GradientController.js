@@ -7,8 +7,7 @@ class GradientController extends View{
         super();
         this.editColor = editColor;
         this.subViews = [];
-        this.mode = 'gradient'; // gradient, random
-        // this.mode = 'random'; // gradient, random
+        this.mode = 'gradient'; // gradient, swatches, bars, random
         this.addSubView(0);
         this.setActiveView(this.subViews[0]);
         this.reorderSubViews();
@@ -66,15 +65,6 @@ class GradientController extends View{
         this['render_'+this.mode](views);
     }
 
-    render_gradient(views) {
-        let c = document.getElementById('randomCanvas');
-        c.style.display = 'none';
-        document.body.style.backgroundImage = `
-            linear-gradient(${views.map(v => v.targetColor.toString()).join(',')}),
-            url(checkers.png)
-        `;
-    }
-
     getColorAt(i) {
         if(this.subViews.length == 0) return null;
         if(this.subViews.length == 1) return this.subViews[0].targetColor.toString();
@@ -96,6 +86,35 @@ class GradientController extends View{
         return color.toString();
     }
 
+    render_gradient(views) {
+        let c = document.getElementById('randomCanvas');
+        c.style.display = 'none';
+        document.body.style.backgroundImage = `
+            linear-gradient(${views.map(v => v.targetColor.toString()).join(',')}),
+            url(checkers.png)
+        `;
+    }
+
+    render_swatches() {
+        document.body.style.backgroundImage = `none`;
+        document.body.style.background = `#0000`;
+        let c = document.getElementById('randomCanvas');
+        c.style.display = 'block';
+        c.width = window.innerWidth;
+        c.height = window.innerHeight;
+        let ctx = c.getContext('2d');
+        const size = 53;
+        for(let x=0; x < window.innerWidth; x += size) {
+            for(let y=0; y < window.innerHeight; y += size) {
+                let i = Math.floor(Math.random() * this.subViews.length);
+                ctx.fillStyle = (
+                    this.subViews[i] || {targetColor: '#0000'}
+                ).targetColor.toString();
+                ctx.fillRect(x, y, size, size);
+            }
+        }
+    }
+
     render_random() {
         document.body.style.backgroundImage = `none`;
         document.body.style.background = `#0000`;
@@ -111,6 +130,26 @@ class GradientController extends View{
                 ctx.fillRect(x, y, size, size);
             }
         }
+    }
+
+    render_bars() {
+        document.body.style.backgroundImage = `none`;
+        document.body.style.background = `#0000`;
+        let c = document.getElementById('randomCanvas');
+        c.style.display = 'block';
+        c.width = window.innerWidth;
+        c.height = window.innerHeight;
+        let ctx = c.getContext('2d');
+
+        this.subViews.forEach((v, i, {length}) => {
+            ctx.fillStyle = v.targetColor.toString();
+            ctx.fillRect(
+                0,
+                Math.round(i*c.height/length),
+                c.width,
+                Math.round(c.height/length) + 1,
+            );
+        });
     }
 }
 

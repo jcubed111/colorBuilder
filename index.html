@@ -8,17 +8,17 @@
 <body>
     <div id="sliderArea">
         <div id="mainInput">
-            <div class="textInputWrapper hex">
+            <div class="controlGroup hex">
                 <input id='hexInput' type="text" value="#58fd63"  autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
                 <div class="button copyButton"><i class="fal fa-copy"></i></div>
                 <div class="button pasteButton"><i class="fal fa-paste"></i></div>
             </div>
-            <div class="textInputWrapper rgb">
+            <div class="controlGroup rgb">
                 <input id='rgbInput' type="text" value="rgba(15, 485, 15, 0.5)"  autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
                 <div class="button copyButton"><i class="fal fa-copy"></i></div>
                 <div class="button pasteButton"><i class="fal fa-paste"></i></div>
             </div>
-            <div class="textInputWrapper hsl">
+            <div class="controlGroup hsl">
                 <input id='hslInput' type="text" value="hsla(15, 23, 65, 0.2)"  autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
                 <div class="button copyButton"><i class="fal fa-copy"></i></div>
                 <div class="button pasteButton"><i class="fal fa-paste"></i></div>
@@ -36,7 +36,21 @@
                 <div class="sliderMarker"></div>
             </div>
         </div>
-
+        <div id="gradientViewController">
+            <div class="controlGroup vertical modes">
+                <div class="button mode_gradient"><i class="fal fa-arrows-alt-v"></i></div>
+                <div class="button mode_bars"><i class="fad fa-bars"></i></div>
+                <div class="button mode_swatches"><i class="fal fa-bring-forward"></i></div>
+                <div class="button mode_random"><i class="fad fa-th"></i></div>
+            </div>
+            <div class="controlGroup vertical copys">
+                <div class="button copy0x"><i class="fal fa-copy"></i><span class='desc'>0x,</span></div>
+                <div class="button copyPound"><i class="fal fa-copy"></i><span class='desc'>&nbsp;#,</span></div>
+                <div class="button copyPoundQ"><i class="fal fa-copy"></i><span class='desc'>"#",</span></div>
+                <div class="button copyPoundNewline"><i class="fal fa-copy"></i><span class='desc'>&nbsp;#&crarr;</span></div>
+                <!-- <div class="button paste"><i class="fal fa-paste"></i></div> -->
+            </div>
+        </div>
     </div>
 
     <div id="gradientController"></div>
@@ -74,6 +88,7 @@
     <script src="View.js"></script>
     <script src="Sliders.js"></script>
     <script src="GradientController.js"></script>
+    <script src="GradientViewController.js"></script>
     <script src="main.js"></script>
 </body>
 </html>

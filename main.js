@@ -1,5 +1,6 @@
 let activeColor = new ColorPointer();
-new GradientController(activeColor);
+let gradC = new GradientController(activeColor);
+new GradientViewController(gradC);
 
 let sliderArea = document.getElementById('sliderArea');
 sliderArea.append((new RedSlider(activeColor)).el);
@@ -14,6 +15,10 @@ new ColorView(activeColor);
 new InputView(activeColor);
 
 
-activeColor.setR(50);
-activeColor.setG(78);
-activeColor.setB(15);
+// activeColor.setR(32);
+// activeColor.setG(174);
+// activeColor.setB(104);
+
+activeColor.setR(Math.floor(50+Math.random()*150));
+activeColor.setG(Math.floor(50+Math.random()*150));
+activeColor.setB(Math.floor(50+Math.random()*150));

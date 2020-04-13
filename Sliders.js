@@ -321,8 +321,10 @@ class InputView extends View{
 
         ['hex', 'rgb', 'hsl'].forEach(t => {
             this.$(`.${t} .copyButton`).addEventListener('click', e => {
+                const buttonEl = e.currentTarget;
                 this.$(`#${t}Input`).select();
                 document.execCommand("copy");
+                toastSuccess(buttonEl);
             });
         });
         this.el.querySelectorAll('.pasteButton').forEach(el => el.addEventListener('click', async e => {

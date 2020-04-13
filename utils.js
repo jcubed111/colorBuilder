@@ -33,3 +33,14 @@ function prettyHsv(h, s, v, a=255) {
         return 'hsla(' + h + ', ' + newS.toFixed(1) + '%, ' + l.toFixed(1) + '%, ' + formatDecimal(a/255, 2) + ')';
     }
 }
+
+async function toastSuccess(button) {
+    let el = document.createElement('div');
+    el.className = 'buttonSuccessToast';
+    el.innerHTML = '<i class="fal fa-clipboard-check"></i>';
+    button.appendChild(el);
+    await new Promise(resolve => setTimeout(resolve, 500));
+    el.classList.add('fade');
+    await new Promise(resolve => setTimeout(resolve, 500));
+    el.remove();
+}

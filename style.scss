@@ -17,6 +17,8 @@ body{
     bottom: 0;
     left: 0;
     right: 0;
+    font-size: 21px;
+    font-family: Inconsolata, monospace;
 }
 
 #sliderArea{
@@ -24,47 +26,51 @@ body{
     // flex-direction: row;
     // align-items: flex-end;
     display: grid;
-    grid-template-rows: 1fr auto auto auto;
+    grid-template-rows: auto 1fr auto auto auto;
     justify-content: right;
 
     .view-HueSlider{
-        grid-column: 4 / 5;
-        grid-row: 1 / 3;
+        grid-column: 5 / 6;
+        grid-row: 1 / 4;
     }
     .view-SatSlider{
-        grid-column: 2 / 3;
-        grid-row: 2 / 3;
+        grid-column: 3 / 4;
+        grid-row: 3 / 4;
     }
     .view-ValSlider{
-        grid-column: 3 / 4;
-        grid-row: 2 / 3;
-    }
-    .view-RedSlider{
-        grid-column: 1 / 2;
-        grid-row: 3 / 4;
-    }
-    .view-GreenSlider{
-        grid-column: 2 / 3;
-        grid-row: 3 / 4;
-    }
-    .view-BlueSlider{
-        grid-column: 3 / 4;
-        grid-row: 3 / 4;
-    }
-    .view-AlphaSlider{
         grid-column: 4 / 5;
         grid-row: 3 / 4;
     }
-    #mainInput{
-        grid-column: 1 / 5;
+    .view-RedSlider{
+        grid-column: 2 / 3;
         grid-row: 4 / 5;
     }
+    .view-GreenSlider{
+        grid-column: 3 / 4;
+        grid-row: 4 / 5;
+    }
+    .view-BlueSlider{
+        grid-column: 4 / 5;
+        grid-row: 4 / 5;
+    }
+    .view-AlphaSlider{
+        grid-column: 5 / 6;
+        grid-row: 4 / 5;
+    }
+    #mainInput{
+        grid-column: 2 / 6;
+        grid-row: 5 / 6;
+    }
     #mainColorDisplay{
-        grid-column: 1 / 2;
-        grid-row: 2 / 3;
+        grid-column: 2 / 3;
+        grid-row: 3 / 4;
     }
     #satValSlider{
-        grid-column: 1 / 4;
+        grid-column: 2 / 5;
+        grid-row: 1 / 3;
+    }
+    #gradientViewController{
+        grid-column: 1 / 2;
         grid-row: 1 / 2;
     }
 }
@@ -189,43 +195,91 @@ input{
     }
 }
 
-#mainInput{
-    @extend %sliderBlock;
-    width: auto;
+.controlGroup{
+    display: flex;
+    flex-direction: row;
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid #000;
+    &:not(:last-child) {
+        margin-bottom: 5px;
+    }
 
-    .textInputWrapper{
-        display: flex;
-        flex-direction: row;
-        border-radius: 4px;
-        overflow: hidden;
-        border: 1px solid #000;
-        &:not(:last-child) {
-            margin-bottom: 5px;
-        }
+    input{
+        border: 0px none;
+        flex-grow: 1;
+    }
 
-        input{
-            border: 0px none;
-            flex-grow: 1;
-        }
-
-        .button{
-            padding: 5px 8px 0;
-            background: #333;
-            color: #aaa;
-            font-size: 20px;
-            text-align: center;
-            cursor: pointer;
+    .button{
+        position: relative;
+        padding: 5px 8px 6px;
+        background: #333;
+        color: #aaa;
+        font-size: 20px;
+        text-align: center;
+        cursor: pointer;
+        min-width: 34px;
+        &:not(:first-child) {
             border-left: 1px solid #000;
+        }
 
-            &:hover{
-                background: #555;
-            }
+        &:hover{
+            background: #555;
+        }
 
-            &:active{
-                background: #181818;
+        &:active{
+            background: #181818;
+        }
+
+        &.active{
+            background: #999;
+            color: #000;
+        }
+
+        .desc{
+            padding-left: 1ch;
+            font-size: 85%;
+            display: inline-block;
+            height: 18px;
+        }
+
+        .buttonSuccessToast{
+            padding: inherit;
+            position: absolute;
+            z-index: 1;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            background: #555;
+            color: inherit;
+            opacity: 1.0;
+            pointer-events: none;
+            transition: opacity 0.5s;
+            text-align: center;
+
+            &.fade{
+                opacity: 0.0;
             }
         }
     }
+}
+
+.controlGroup.vertical{
+    flex-direction: column;
+
+    .button{
+        border-left: 0px none;
+        &:not(:first-child) {
+            border-top: 1px solid #000;
+        }
+        text-align: left;
+    }
+}
+
+#mainInput{
+    @extend %sliderBlock;
+    width: auto;
 }
 
 #mainColorDisplay{
@@ -304,6 +358,22 @@ input{
                 border-bottom: $crossHairRadius solid #fff;
                 border-color: inherit;
             }
+        }
+    }
+}
+
+
+#gradientViewController{
+    @extend %sliderBlock;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+
+    .modes{
+        margin-right: 5px;
+        margin-bottom: 0;
+        .button{
+            text-align: center;
         }
     }
 }
