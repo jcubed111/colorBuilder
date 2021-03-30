@@ -318,6 +318,22 @@ class InputView extends View{
         this.updateView();
 
         // TODO: handle user typing in the boxes
+        ['#hexInput', '#rgbInput', '#hslInput'].forEach(selector => {
+            this.$(selector).addEventListener('focus', e => {
+                this.backupColor = this.targetColor.toString();
+            });
+            this.$(selector).addEventListener('keydown', e => {
+                if(e.key == 'Escape') {
+                    this.parseAndSet(this.backupColor);
+                }
+            });
+            this.$(selector).addEventListener('input', e => {
+                const valid = this.parseAndSet(this.$(selector).value, selector);
+                if(!valid) {
+                    this.$(selector).classList.add('invalid');
+                }
+            });
+        });
 
         ['hex', 'rgb', 'hsl'].forEach(t => {
             this.$(`.${t} .copyButton`).addEventListener('click', e => {
@@ -328,51 +344,65 @@ class InputView extends View{
             });
         });
         this.el.querySelectorAll('.pasteButton').forEach(el => el.addEventListener('click', async e => {
-            this.$(`#hexInput`).select();
-            document.execCommand("paste");
+            // this.$(`#hexInput`).select();
+            // document.execCommand("paste");
             let v = await navigator.clipboard.readText();
             console.log(v);
-            // try{
-                if(v.match(/rgb/)) {
-                    let [, r, g, b, , a] = v.replace(/\s/g, '').match(/^rgba?\(([0-9]+),([0-9]+),([0-9]+)(,([0-9.]+)%?)?\)$/);
-                    this.targetColor.setR(+r);
-                    this.targetColor.setG(+g);
-                    this.targetColor.setB(+b);
-                    this.targetColor.setA(a == undefined ? 255 : ~~(255*a));
-                }else if(v.match(/#?[0-9a-f]{6}|#?[0-9a-f]{8}/i)) {
-                    let [, ...nums] = v.trim().match(/^#?([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})?$/i);
-                    nums = nums.map(n => n || "ff").map(n => parseInt(n, 16));
-                    this.targetColor.setR(nums[0]);
-                    this.targetColor.setG(nums[1]);
-                    this.targetColor.setB(nums[2]);
-                    this.targetColor.setA(nums[3]);
-                }else if(v.match(/#?[0-9a-f]{3,4}/i)) {
-                    let [, ...nums] = v.trim().match(/^#?([0-9a-f])([0-9a-f])([0-9a-f])([0-9a-f])?$/i);
-                    nums = nums.map(n => n || "f").map(n => parseInt(n+n, 16));
-                    this.targetColor.setR(nums[0]);
-                    this.targetColor.setG(nums[1]);
-                    this.targetColor.setB(nums[2]);
-                    this.targetColor.setA(nums[3]);
-                }else if(v.match(/hsl/)) {
-                    let [, h, s, l, , a] = v.replace(/\s/g, '').match(/^rgba?\(([0-9]+),([0-9.]+)%?,([0-9.]+)%?(,([0-9.]+)%?)?\)$/);
-                    let v = +l + s*Math.min(+l, 100-l)/100;
-                    this.targetColor.setH(+h);
-                    this.targetColor.setS(+s);
-                    this.targetColor.setV(+v);
-                    this.targetColor.setA(a == undefined ? 255 : ~~(255*a));
-                }else{
-                    throw `rejected ${v}`;
-                }
-            // }catch (e) {
-            //     this.updateView();
-            //     console.log('rejected')
-            // }
+            this.parseAndSet(v);
         }));
     }
 
+    parseAndSet(colorString, lockSelector=null) {
+        // lockSelector: used to specify that a certain input box shouldn't be
+        //   updated when the color changes from this parse
+        this.lockSelector = lockSelector;
+
+        colorString = colorString.replace(/\s/g, '');
+
+        let rgbMatcher = /^rgba?\(([0-9]+),([0-9]+),([0-9]+)(,([0-9.]+)%?)?\)$/i;
+        let hexMatcher = /^#?([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})?$/i;
+        let hexShortMatcher = /^#?([0-9a-f])([0-9a-f])([0-9a-f])([0-9a-f])?$/i;
+        let hslMatcher = /^hsla?\(([0-9]+),([0-9.]+)%?,([0-9.]+)%?(,([0-9.]+)%?)?\)$/;
+
+        try{
+            if(colorString.match(rgbMatcher)) {
+                let [, r, g, b, , a] = colorString.match(rgbMatcher);
+                this.targetColor.setRgb(+r, +g, +b, a == undefined ? 255 : ~~(255*a));
+
+            }else if(colorString.match(hexMatcher)) {
+                let [, ...nums] = colorString.match(hexMatcher);
+                nums = nums.map(n => n || "ff").map(n => parseInt(n, 16));
+                this.targetColor.setRgb(...nums);
+
+            }else if(colorString.match(hexShortMatcher)) {
+                let [, ...nums] = colorString.match(hexShortMatcher);
+                nums = nums.map(n => n || "f").map(n => parseInt(n+n, 16));
+                this.targetColor.setRgb(...nums);
+
+            }else if(colorString.match(hslMatcher)) {
+                let [, h, s, l, , a] = colorString.match(hslMatcher);
+                let v = +l + s*Math.min(+l, 100-l)/100;
+                this.targetColor.setHsv(+h, +s, +v, a == undefined ? 255 : ~~(255*a));
+
+            }else{
+                console.log(`rejected ${colorString}`);
+                return false;
+            }
+        } finally {
+            this.lockSelector = null;
+        }
+        return true;
+    }
+
     updateView() {
-        this.$('#hexInput').value = hex(this.targetColor.r(), this.targetColor.g(), this.targetColor.b(), this.targetColor.a());
-        this.$('#rgbInput').value = prettyRgb(this.targetColor.r(), this.targetColor.g(), this.targetColor.b(), this.targetColor.a(), 3);
-        this.$('#hslInput').value = prettyHsv(this.targetColor.h(), this.targetColor.s(), this.targetColor.v(), this.targetColor.a());
+        this.updateInputIfNotLocked('#hexInput', hex(this.targetColor.r(), this.targetColor.g(), this.targetColor.b(), this.targetColor.a()));
+        this.updateInputIfNotLocked('#rgbInput', prettyRgb(this.targetColor.r(), this.targetColor.g(), this.targetColor.b(), this.targetColor.a(), 3));
+        this.updateInputIfNotLocked('#hslInput', prettyHsv(this.targetColor.h(), this.targetColor.s(), this.targetColor.v(), this.targetColor.a()));
+    }
+
+    updateInputIfNotLocked(selector, colorString) {
+        if(selector == this.lockSelector) return;
+        this.$(selector).value = colorString;
+        this.$(selector).classList.remove('invalid');
     }
 }

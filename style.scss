@@ -86,6 +86,10 @@ input{
     font-family: Inconsolata, monospace;
     padding: 5px 0px 5px 8px;
     letter-spacing: 1px;
+
+    &.invalid{
+        background: #200e0e;
+    }
 }
 
 %sliderBlock{

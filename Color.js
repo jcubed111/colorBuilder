@@ -40,6 +40,24 @@ class Color extends Model{
     v() { return this._asHsv()[2]; }
     a() { return this._asRgb()[3]; }
 
+    setRgb(r, g, b, a = this.a()) {
+        this._convertToRgb();
+        this.value[0] = r;
+        this.value[1] = g;
+        this.value[2] = b;
+        this.value[3] = a;
+        this.triggerChange();
+    }
+
+    setHsv(h, s, v, a = this.a()) {
+        this._convertToHsv();
+        this.value[0] = h;
+        this.value[1] = s;
+        this.value[2] = v;
+        this.value[3] = a;
+        this.triggerChange();
+    }
+
     setR(v) {
     	this._convertToRgb();
         this.value[0] = v;
@@ -144,27 +162,38 @@ class Color extends Model{
     }
 };
 
-class ColorPointer extends Color{
+class ColorPointer extends Model{
     constructor() {
         super();
+        this.isRgb = null;
+        this.value = null;
         this.off = () => {};
     }
 
     pointTo(to) {
+        // stop listening to anything we are listening to,
+        // and start replicating the events of `to`
         this.off();
         this.to = to;
+
         const onChangeCb = (...args) => {
             this.isRgb = this.to.isRgb;
             this.value = this.to.value.slice();
             this.triggerChange(...args);
         };
         let toCbId = this.to.onChange(onChangeCb);
+
+        // register a callback to stop listening to our current target
         this.off = _ => {
             this.to.offChange(toCbId);
         };
+
+        // trigger an initial change
         onChangeCb();
     }
 
+    setRgb(...args) { return this.to.setRgb(...args); }
+    setHsv(...args) { return this.to.setHsv(...args); }
     setR(...args) { return this.to.setR(...args); }
     setG(...args) { return this.to.setG(...args); }
     setB(...args) { return this.to.setB(...args); }
@@ -172,4 +201,19 @@ class ColorPointer extends Color{
     setS(...args) { return this.to.setS(...args); }
     setV(...args) { return this.to.setV(...args); }
     setA(...args) { return this.to.setA(...args); }
+    r(...args) { return this.to.r(...args); }
+    g(...args) { return this.to.g(...args); }
+    b(...args) { return this.to.b(...args); }
+    h(...args) { return this.to.h(...args); }
+    s(...args) { return this.to.s(...args); }
+    v(...args) { return this.to.v(...args); }
+    a(...args) { return this.to.a(...args); }
+
+    clone(...args) { return this.to.clone(...args); }
+    _convertToRgb(...args) { return this.to._convertToRgb(...args); }
+    _convertToHsv(...args) { return this.to._convertToHsv(...args); }
+    _asHsv(...args) { return this.to._asHsv(...args); }
+    _asRgb(...args) { return this.to._asRgb(...args); }
+    toString(...args) { return this.to.toString(...args); }
+    getTextColor(...args) { return this.to.getTextColor(...args); }
 }
