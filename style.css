@@ -457,6 +457,11 @@ input.invalid {
   border-bottom-right-radius: 8px;
   border-top-right-radius: 8px;
 }
+#historyView .controlGroup {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+}
 
 #randomCanvas {
   position: absolute;

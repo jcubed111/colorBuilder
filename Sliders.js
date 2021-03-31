@@ -329,9 +329,7 @@ class InputView extends View{
             });
             this.$(selector).addEventListener('input', e => {
                 const valid = this.parseAndSet(this.$(selector).value, selector);
-                if(!valid) {
-                    this.$(selector).classList.add('invalid');
-                }
+                this.$(selector).classList.toggle('invalid', !valid);
             });
         });
 

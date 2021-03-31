@@ -501,6 +501,12 @@ input{
         border-bottom-right-radius: 8px;
         border-top-right-radius: 8px;
     }
+
+    .controlGroup{
+        position: absolute;
+        left: 10px;
+        bottom: 10px;
+    }
 }
 
 #randomCanvas{

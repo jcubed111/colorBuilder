@@ -36,6 +36,11 @@ class HistoryController extends View{
             gradController.getColors().map(c => c.toString()),
         ));
         this.render();
+
+        document.getElementById('gradPasteButton').addEventListener(
+            'click',
+            e => this.pasteList(),
+        );
     }
 
     el() {
@@ -109,5 +114,15 @@ class HistoryController extends View{
 
             this.render();
         }
+    }
+
+    async pasteList() {
+        let v = await navigator.clipboard.readText();
+        console.log(v);
+        let colorList = parseList(v);
+        if(colorList.length < 1) return;
+
+        this.addNew();
+        this.gradController.setToColors(colorList);
     }
 }

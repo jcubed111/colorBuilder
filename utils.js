@@ -69,19 +69,29 @@ function colorsToBgImage(colors, smooth=true, dir='to bottom') {
     }
 }
 
+const hexMatcher = /^#?([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})?$/i;
+const hexShortMatcher = /^#?([0-9a-f])([0-9a-f])([0-9a-f])([0-9a-f])?$/i;
+const rgbMatcher = /^rgba?\(([0-9]+),([0-9]+),([0-9]+)(,([0-9.]+%?))?\)$/i;
+const hslMatcher = /^hsla?\(([0-9]+),([0-9.]+%?),([0-9.]+%?)(,([0-9.]+%?))?\)$/i;
+const hsvMatcher = /^hsva?\(([0-9]+),([0-9.]+%?),([0-9.]+%?)(,([0-9.]+%?))?\)$/i;
+
+function convertPercent(string) {
+    if(/%$/.test(string)) {
+        return string.substr(string, string.length - 1) / 100;
+    }else{
+        return +string;
+    }
+}
+
 function parseColor(colorString) {
     colorString = colorString.replace(/\s/g, '');
-
-    let rgbMatcher = /^rgba?\(([0-9]+),([0-9]+),([0-9]+)(,([0-9.]+)%?)?\)$/i;
-    let hexMatcher = /^#?([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})?$/i;
-    let hexShortMatcher = /^#?([0-9a-f])([0-9a-f])([0-9a-f])([0-9a-f])?$/i;
-    let hslMatcher = /^hsla?\(([0-9]+),([0-9.]+)%?,([0-9.]+)%?(,([0-9.]+)%?)?\)$/;
 
     const color = new Color();
 
     if(colorString.match(rgbMatcher)) {
         let [, r, g, b, , a] = colorString.match(rgbMatcher);
-        color.setRgb(+r, +g, +b, a == undefined ? 255 : ~~(255*a));
+        a = (a == undefined) ? 1.0 : convertPercent(a);
+        color.setRgb(+r, +g, +b, ~~(255*a));
 
     }else if(colorString.match(hexMatcher)) {
         let [, ...nums] = colorString.match(hexMatcher);
@@ -95,8 +105,18 @@ function parseColor(colorString) {
 
     }else if(colorString.match(hslMatcher)) {
         let [, h, s, l, , a] = colorString.match(hslMatcher);
+        s = convertPercent(s) * 100;
+        l = convertPercent(l) * 100;
+        a = (a == undefined) ? 1.0 : convertPercent(a);
         let v = +l + s*Math.min(+l, 100-l)/100;
-        color.setHsv(+h, +s, +v, a == undefined ? 255 : ~~(255*a));
+        color.setHsv(+h, +s, +v, ~~(255*a));
+
+    }else if(colorString.match(hsvMatcher)) {
+        let [, h, s, v, , a] = colorString.match(hsvMatcher);
+        s = convertPercent(s) * 100;
+        v = convertPercent(v) * 100;
+        a = (a == undefined) ? 1.0 : convertPercent(a);
+        color.setHsv(+h, +s, +v, ~~(255*a));
 
     }else{
         console.log(`rejected ${colorString}`);
@@ -104,4 +124,23 @@ function parseColor(colorString) {
     }
 
     return color;
+}
+
+function parseList(colorListString) {
+    colorListString = colorListString.replace(/\s/g, '');
+
+    let anyFormatParser = new RegExp(
+        [
+            rgbMatcher,
+            hexMatcher,
+            hexShortMatcher,
+            hslMatcher,
+            hsvMatcher,
+        ].map(r => `(${r.source.replace(/^\^|\$$/g, '')})`).join('|'),
+        'ig',
+    );
+
+    let matches = colorListString.match(anyFormatParser);
+
+    return matches.map(s => parseColor(s));
 }
