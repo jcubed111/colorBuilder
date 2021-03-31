@@ -405,11 +405,10 @@ input{
         $addBeforeAfterRadius: 20px;
         .addBefore,
         .addAfter,
+        .addMultiBefore,
         .duplicate,
         .delete{
             position: absolute;
-            left: 25%;
-            right: 25%;
             height: $addBeforeAfterRadius*2;
             text-align: center;
             cursor: pointer;
@@ -445,12 +444,22 @@ input{
 
         &:hover .addBefore,
         &:hover .addAfter,
+        &:hover .addMultiBefore,
         &:hover .duplicate,
         &:hover .delete{ color: #fff3; }
 
-        .addBefore{ top: -$addBeforeAfterRadius; }
+        .addBefore, .addMultiBefore{ top: -$addBeforeAfterRadius; }
+        .addBefore, .addAfter{
+            left: 30%;
+            right: 30%;
+        }
+        .addMultiBefore{
+            left: 70%;
+            right: 0%;
+        }
         .addAfter{ bottom: -$addBeforeAfterRadius; }
         &:not(:last-child) .addAfter{ display: none; }
+        &:first-child .addMultiBefore{ display: none; }
         .duplicate{
             left: -$addBeforeAfterRadius;
             width: 2*$addBeforeAfterRadius;
@@ -483,6 +492,9 @@ input{
     }
 }
 #gradientController .gradientSwatch:hover + .gradientSwatch .addBefore{
+    color: #fff3;
+}
+#gradientController .gradientSwatch:hover + .gradientSwatch .addMultiBefore{
     color: #fff3;
 }
 

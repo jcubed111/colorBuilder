@@ -51,6 +51,26 @@ class GradientController extends View{
         this.triggerChange();
     }
 
+    addMultiSubView(insertIndex) {
+        let num = prompt("How many would you like to add?", 1);
+        if(num == null || num < 1) return;
+        num = +num;
+
+        const [a, b] = this.subViews.slice(insertIndex-1, insertIndex+1).map(v => v.targetColor);
+
+        let colors = Array(num).fill(0).map((_, i) => {
+            let factor = (i + 1) / (num + 1);
+            let color = new Color();
+            color.setR(Math.round(a.r() * (1.0 - factor) + b.r() * factor));
+            color.setG(Math.round(a.g() * (1.0 - factor) + b.g() * factor));
+            color.setB(Math.round(a.b() * (1.0 - factor) + b.b() * factor));
+            color.setA(Math.round(a.a() * (1.0 - factor) + b.a() * factor));
+            return color;
+        });
+
+        colors.forEach((c, i) => this.addSubView(insertIndex + i, c));
+    }
+
     removeSubView(v) {
         if(this.subViews.length == 1) return;
         let i = this.subViews.indexOf(v);
@@ -174,6 +194,10 @@ class GradientSwatch extends View {
         });
         this.$('.addAfter').addEventListener('click', e => {
             this.parent.addSubView(this.getIndex() + 1);
+            e.stopPropagation();
+        });
+        this.$('.addMultiBefore').addEventListener('click', e => {
+            this.parent.addMultiSubView(this.getIndex());
             e.stopPropagation();
         });
         this.$('.duplicate').addEventListener('click', e => {

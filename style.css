@@ -355,11 +355,10 @@ input.invalid {
 }
 #gradientController .gradientSwatch .addBefore,
 #gradientController .gradientSwatch .addAfter,
+#gradientController .gradientSwatch .addMultiBefore,
 #gradientController .gradientSwatch .duplicate,
 #gradientController .gradientSwatch .delete {
   position: absolute;
-  left: 25%;
-  right: 25%;
   height: 40px;
   text-align: center;
   cursor: pointer;
@@ -371,12 +370,14 @@ input.invalid {
 }
 #gradientController .gradientSwatch .addBefore:hover,
 #gradientController .gradientSwatch .addAfter:hover,
+#gradientController .gradientSwatch .addMultiBefore:hover,
 #gradientController .gradientSwatch .duplicate:hover,
 #gradientController .gradientSwatch .delete:hover {
   color: #ffff;
 }
 #gradientController .gradientSwatch .addBefore:before,
 #gradientController .gradientSwatch .addAfter:before,
+#gradientController .gradientSwatch .addMultiBefore:before,
 #gradientController .gradientSwatch .duplicate:before,
 #gradientController .gradientSwatch .delete:before {
   content: "";
@@ -392,22 +393,34 @@ input.invalid {
 }
 #gradientController .gradientSwatch .addBefore:hover:before,
 #gradientController .gradientSwatch .addAfter:hover:before,
+#gradientController .gradientSwatch .addMultiBefore:hover:before,
 #gradientController .gradientSwatch .duplicate:hover:before,
 #gradientController .gradientSwatch .delete:hover:before {
   top: 0px;
   bottom: 0px;
   transition: top ease-out 0.15s, bottom ease-out 0.15s;
 }
-#gradientController .gradientSwatch:hover .addBefore, #gradientController .gradientSwatch:hover .addAfter, #gradientController .gradientSwatch:hover .duplicate, #gradientController .gradientSwatch:hover .delete {
+#gradientController .gradientSwatch:hover .addBefore, #gradientController .gradientSwatch:hover .addAfter, #gradientController .gradientSwatch:hover .addMultiBefore, #gradientController .gradientSwatch:hover .duplicate, #gradientController .gradientSwatch:hover .delete {
   color: #fff3;
 }
-#gradientController .gradientSwatch .addBefore {
+#gradientController .gradientSwatch .addBefore, #gradientController .gradientSwatch .addMultiBefore {
   top: -20px;
+}
+#gradientController .gradientSwatch .addBefore, #gradientController .gradientSwatch .addAfter {
+  left: 30%;
+  right: 30%;
+}
+#gradientController .gradientSwatch .addMultiBefore {
+  left: 70%;
+  right: 0%;
 }
 #gradientController .gradientSwatch .addAfter {
   bottom: -20px;
 }
 #gradientController .gradientSwatch:not(:last-child) .addAfter {
+  display: none;
+}
+#gradientController .gradientSwatch:first-child .addMultiBefore {
   display: none;
 }
 #gradientController .gradientSwatch .duplicate {
@@ -439,6 +452,10 @@ input.invalid {
 }
 
 #gradientController .gradientSwatch:hover + .gradientSwatch .addBefore {
+  color: #fff3;
+}
+
+#gradientController .gradientSwatch:hover + .gradientSwatch .addMultiBefore {
   color: #fff3;
 }
 
