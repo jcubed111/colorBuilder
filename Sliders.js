@@ -355,42 +355,12 @@ class InputView extends View{
     parseAndSet(colorString, lockSelector=null) {
         // lockSelector: used to specify that a certain input box shouldn't be
         //   updated when the color changes from this parse
+        let parsed = parseColor(colorString);
+        if(parsed == false) return false;
+
         this.lockSelector = lockSelector;
-
-        colorString = colorString.replace(/\s/g, '');
-
-        let rgbMatcher = /^rgba?\(([0-9]+),([0-9]+),([0-9]+)(,([0-9.]+)%?)?\)$/i;
-        let hexMatcher = /^#?([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})?$/i;
-        let hexShortMatcher = /^#?([0-9a-f])([0-9a-f])([0-9a-f])([0-9a-f])?$/i;
-        let hslMatcher = /^hsla?\(([0-9]+),([0-9.]+)%?,([0-9.]+)%?(,([0-9.]+)%?)?\)$/;
-
-        try{
-            if(colorString.match(rgbMatcher)) {
-                let [, r, g, b, , a] = colorString.match(rgbMatcher);
-                this.targetColor.setRgb(+r, +g, +b, a == undefined ? 255 : ~~(255*a));
-
-            }else if(colorString.match(hexMatcher)) {
-                let [, ...nums] = colorString.match(hexMatcher);
-                nums = nums.map(n => n || "ff").map(n => parseInt(n, 16));
-                this.targetColor.setRgb(...nums);
-
-            }else if(colorString.match(hexShortMatcher)) {
-                let [, ...nums] = colorString.match(hexShortMatcher);
-                nums = nums.map(n => n || "f").map(n => parseInt(n+n, 16));
-                this.targetColor.setRgb(...nums);
-
-            }else if(colorString.match(hslMatcher)) {
-                let [, h, s, l, , a] = colorString.match(hslMatcher);
-                let v = +l + s*Math.min(+l, 100-l)/100;
-                this.targetColor.setHsv(+h, +s, +v, a == undefined ? 255 : ~~(255*a));
-
-            }else{
-                console.log(`rejected ${colorString}`);
-                return false;
-            }
-        } finally {
-            this.lockSelector = null;
-        }
+        this.targetColor.setRgb(...parsed._asRgb());
+        this.lockSelector = null;
         return true;
     }
 

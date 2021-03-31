@@ -11,6 +11,8 @@ class GradientController extends View{
         this.addSubView(0);
         this.setActiveView(this.subViews[0]);
         this.reorderSubViews();
+
+        this.editColor.onChange(_ => this.triggerChange());
     }
 
     setActiveView(v) {
@@ -46,6 +48,7 @@ class GradientController extends View{
         this.reorderSubViews();
         this.setActiveView(v);
         this.render();
+        this.triggerChange();
     }
 
     removeSubView(v) {
@@ -58,11 +61,25 @@ class GradientController extends View{
         this.el.removeChild(v.el);
         this.reorderSubViews();
         this.render();
+        this.triggerChange();
+    }
+
+    setToColors(colors) {
+        if(colors.length < 1) return;
+        colors.forEach((c, i) => this.addSubView(i, c));
+        while(this.subViews.length > colors.length) {
+            this.removeSubView(this.subViews[colors.length]);
+        }
+        this.setActiveView(this.subViews[0]);
     }
 
     render() {
         let views = this.subViews.length == 1 ? [this.subViews[0], this.subViews[0]] : this.subViews;
         this['render_'+this.mode](views);
+    }
+
+    getColors() {
+        return this.subViews.map(v => v.targetColor.clone());
     }
 
     getColorAt(i) {
@@ -87,12 +104,10 @@ class GradientController extends View{
     }
 
     render_gradient(views) {
-        let c = document.getElementById('randomCanvas');
-        c.style.display = 'none';
-        document.body.style.backgroundImage = `
-            linear-gradient(${views.map(v => v.targetColor.toString()).join(',')}),
-            url(checkers.png)
-        `;
+        document.getElementById('randomCanvas').style.display = 'none';
+        document.body.style.backgroundImage = colorsToBgImage(
+            views.map(v => v.targetColor.toString())
+        );
     }
 
     render_swatches() {
@@ -132,24 +147,12 @@ class GradientController extends View{
         }
     }
 
-    render_bars() {
-        document.body.style.backgroundImage = `none`;
-        document.body.style.background = `#0000`;
-        let c = document.getElementById('randomCanvas');
-        c.style.display = 'block';
-        c.width = window.innerWidth;
-        c.height = window.innerHeight;
-        let ctx = c.getContext('2d');
-
-        this.subViews.forEach((v, i, {length}) => {
-            ctx.fillStyle = v.targetColor.toString();
-            ctx.fillRect(
-                0,
-                Math.round(i*c.height/length),
-                c.width,
-                Math.round(c.height/length) + 1,
-            );
-        });
+    render_bars(views) {
+        document.getElementById('randomCanvas').style.display = 'none';
+        document.body.style.backgroundImage = colorsToBgImage(
+            views.map(v => v.targetColor.toString()),
+            false
+        );
     }
 }
 

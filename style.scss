@@ -384,7 +384,7 @@ input{
 
 #gradientController{
     position: absolute;
-    left: 50px;
+    left: 250px;
     top: 0;
     bottom: 0;
     display: flex;
@@ -484,6 +484,23 @@ input{
 }
 #gradientController .gradientSwatch:hover + .gradientSwatch .addBefore{
     color: #fff3;
+}
+
+#historyView{
+    position: absolute;
+    width: 200px;
+    left: 0px;
+    top: 0;
+    bottom: 0;
+    background: #181818;
+    padding-right: 10px;
+
+    .historyGrad{
+        margin-bottom: 2px;
+        height: 30px;
+        border-bottom-right-radius: 8px;
+        border-top-right-radius: 8px;
+    }
 }
 
 #randomCanvas{

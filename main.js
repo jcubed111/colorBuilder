@@ -14,7 +14,6 @@ new SatValSlider(activeColor);
 new ColorView(activeColor);
 new InputView(activeColor);
 
-
 // activeColor.setR(32);
 // activeColor.setG(174);
 // activeColor.setB(104);
@@ -22,3 +21,7 @@ new InputView(activeColor);
 activeColor.setR(Math.floor(50+Math.random()*150));
 activeColor.setG(Math.floor(50+Math.random()*150));
 activeColor.setB(Math.floor(50+Math.random()*150));
+
+// initialize this after setting the default color so
+// it doesn't try to save
+new HistoryController(gradC);

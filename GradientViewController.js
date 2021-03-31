@@ -33,8 +33,7 @@ class GradientViewController extends View{
 
     copyAs(e, format, quote, separator) {
         const buttonEl = e.currentTarget;
-        let colors = this.gradController.subViews
-            .map(v => v.targetColor)
+        let colors = this.gradController.getColors()
             .map(c => format + hex(c.r(), c.g(), c.b(), c.a()).slice(1))
             .map(c => quote + c + quote)
             .join(separator);
