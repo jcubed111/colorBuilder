@@ -51,7 +51,7 @@ class ColorGrid{
         return result;
     }
 
-    extrapolatedAt(x, y) {
+    extrapolatedAt(x, y, defaultReturn = null) {
         if(this.at(x, y) != null) return this.at(x, y);
 
         const nearestColor = maxBy(
@@ -59,7 +59,7 @@ class ColorGrid{
             ([x1, y1, color]) => -((y1 - y) ** 2 + (x1 - x) ** 2),
         );
 
-        if(!nearestColor) return null;
+        if(!nearestColor) return defaultReturn;
 
         // get the closest vertical pair of defined colors, preferring a pair
         // that contains our current y, then preferring the least total distance.
@@ -95,7 +95,7 @@ class ColorGrid{
 
         let [x0, y0, basisColor] = nearestColor;
         let [[ , y1, v1], [ , y2, v2]] = bestVerticalPair;
-        let [[x1 , , h1], [x2 , , h2]] = bestHorizontalPair;
+        let [[x1,  , h1], [x2,  , h2]] = bestHorizontalPair;
 
         // return basisColor;
 
@@ -148,6 +148,126 @@ function render() {
             document.getElementById(`s${x}x${y}`).style.backgroundColor = color?.toString() ?? "transparent";
             let extrapolatedColor = colorGrid.extrapolatedAt(x, y);
             document.getElementById(`e${x}x${y}`).style.backgroundColor = extrapolatedColor?.toString() ?? "transparent";
+        }
+    }
+
+    // render the canvas
+    const canvas = document.getElementById("render");
+    const gl = canvas.getContext("webgl");
+    gl.clearColor(0.0, 0.0, 0.0, 1.0);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+
+    const vertexShader = gl.createShader(gl.VERTEX_SHADER);
+    gl.shaderSource(vertexShader, `
+        precision highp float;
+
+        attribute vec4 vertexPosition;
+        attribute vec4 colorPosition;
+
+        varying vec4 texCoord;
+
+        void main() {
+            gl_Position = vertexPosition * vec4(2.0, 2.0, 0.0, 1.0) - vec4(1.0, 1.0, 0.0, 0.0);
+            texCoord = colorPosition;
+        }
+    `);
+    gl.compileShader(vertexShader);
+    console.log(gl.getShaderInfoLog(vertexShader));
+
+    const fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
+    gl.shaderSource(fragmentShader, `
+        precision highp float;
+
+        varying vec4 texCoord;
+
+        uniform vec4 colorA; uniform vec4 colorB;
+        uniform vec4 colorC; uniform vec4 colorD;
+
+        void main() {
+            gl_FragColor = mix(
+                mix(colorC, colorD, texCoord.x),
+                mix(colorA, colorB, texCoord.x),
+                texCoord.y
+            );
+        }
+    `);
+    gl.compileShader(fragmentShader);
+    console.log(gl.getShaderInfoLog(fragmentShader));
+
+    const shaderProgram = gl.createProgram();
+    gl.attachShader(shaderProgram, vertexShader);
+    gl.attachShader(shaderProgram, fragmentShader);
+    gl.linkProgram(shaderProgram);
+    console.log(gl.getProgramInfoLog(shaderProgram));
+    gl.useProgram(shaderProgram);
+    gl.viewport(0, 0, 500, 500);
+
+    const attribLocations = {
+        vertexPosition: gl.getAttribLocation(shaderProgram, 'vertexPosition'),
+        colorPosition: gl.getAttribLocation(shaderProgram, 'colorPosition'),
+    };
+    const uniformPositions = {
+        colorA: gl.getUniformLocation(shaderProgram, 'colorA'),
+        colorB: gl.getUniformLocation(shaderProgram, 'colorB'),
+        colorC: gl.getUniformLocation(shaderProgram, 'colorC'),
+        colorD: gl.getUniformLocation(shaderProgram, 'colorD'),
+    };
+
+    for(let x = 0; x < colorGrid.width - 1; x++) {
+        for(let y = 0; y < colorGrid.height - 1; y++) {
+            const positionBuffer = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+            const x0 = x / (colorGrid.width - 1);
+            const x1 = (x + 1) / (colorGrid.width - 1);
+            const y0 = y / (colorGrid.height - 1);
+            const y1 = (y + 1) / (colorGrid.height - 1);
+            const positions = [
+                x0, y1,
+                x1, y1,
+                x0, y0,
+                x1, y0,
+            ];
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
+
+            gl.vertexAttribPointer(
+                attribLocations.vertexPosition,
+                2,
+                gl.FLOAT,
+                false,
+                0,
+                0,
+            );
+            gl.enableVertexAttribArray(attribLocations.vertexPosition);
+
+            const texCoordBuffer = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, texCoordBuffer);
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([0, 1, 1, 1, 0, 0, 1, 0]), gl.STATIC_DRAW);
+
+            gl.vertexAttribPointer(
+                attribLocations.colorPosition,
+                2,
+                gl.FLOAT,
+                false,
+                0,
+                0,
+            );
+            gl.enableVertexAttribArray(attribLocations.colorPosition);
+
+            [
+                [uniformPositions.colorA, colorGrid.extrapolatedAt(x, y + 1)],
+                [uniformPositions.colorB, colorGrid.extrapolatedAt(x + 1, y + 1)],
+                [uniformPositions.colorC, colorGrid.extrapolatedAt(x, y)],
+                [uniformPositions.colorD, colorGrid.extrapolatedAt(x + 1, y)],
+            ].forEach(([uPos, color]) => {
+                if(!color) {
+                    gl.uniform4fv(uPos, [0, 0, 0, 0]);
+                }else{
+                    gl.uniform4fv(uPos, color._asRgb().map(v => v / 255.0));
+
+                }
+            });
+
+            gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
         }
     }
 }
