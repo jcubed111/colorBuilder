@@ -90,8 +90,8 @@ class ColorGrid{
         ) || [nearestColor, nearestColor];
 
 
-        console.log(`bestVerticalPair for ${x} ${y}: ${bestVerticalPair}`);
-        console.log(`bestHorizontalPair for ${x} ${y}: ${bestHorizontalPair}`);
+        // console.log(`bestVerticalPair for ${x} ${y}: ${bestVerticalPair}`);
+        // console.log(`bestHorizontalPair for ${x} ${y}: ${bestHorizontalPair}`);
 
         let [x0, y0, basisColor] = nearestColor;
         let [[ , y1, v1], [ , y2, v2]] = bestVerticalPair;
@@ -114,11 +114,6 @@ class ColorGrid{
         }else{
             c1Arr = [c1.h(), c1.s(), c1.v(), c1.a()];
             c2Arr = [c2.h(), c2.s(), c2.v(), c2.a()];
-
-            // ensure that abs(c1.h() - c2.h()) <= 180
-            if(Math.abs(c1.h() - c2.h()) > 180) {
-                c1Arr[0] -= 360;
-            }
         }
 
         let result = new Color();
@@ -151,10 +146,13 @@ function render() {
         }
     }
 
-    // render the canvas
+    renderCanvas();
+}
+
+function renderCanvas() {
     const canvas = document.getElementById("render");
     const gl = canvas.getContext("webgl");
-    gl.clearColor(0.0, 0.0, 0.0, 1.0);
+    gl.clearColor(0.0, 0.0, 0.0, 0.0);
     gl.clear(gl.COLOR_BUFFER_BIT);
 
     const vertexShader = gl.createShader(gl.VERTEX_SHADER);
@@ -182,13 +180,45 @@ function render() {
 
         uniform vec4 colorA; uniform vec4 colorB;
         uniform vec4 colorC; uniform vec4 colorD;
+        uniform int colorsInHsv;
+
+        vec3 hsv2rgb(vec3 c) { // From https://stackoverflow.com/a/17897228/136924
+            vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
+            vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
+            return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
+        }
+
+        float angleSub(float angle1, float angle2) {
+            float diff = fract(angle1 - angle2 + 0.5) - 0.5;
+            return diff < -0.5 ? diff + 1.0 : diff;
+        }
+
+        float hueMix(float h1, float h2, float a) {
+            float delta = angleSub(h2, h1);
+            return fract(h1 + delta * a);
+        }
 
         void main() {
-            gl_FragColor = mix(
-                mix(colorC, colorD, texCoord.x),
-                mix(colorA, colorB, texCoord.x),
-                texCoord.y
-            );
+            if(colorsInHsv == 0) {
+                gl_FragColor = mix(
+                    mix(colorC, colorD, texCoord.x),
+                    mix(colorA, colorB, texCoord.x),
+                    texCoord.y
+                );
+            }else{
+                vec4 hsva;
+                hsva.r = hueMix(
+                    hueMix(colorC.r, colorD.r, texCoord.x),
+                    hueMix(colorA.r, colorB.r, texCoord.x),
+                    texCoord.y
+                );
+                hsva.gba = mix(
+                    mix(colorC, colorD, texCoord.x),
+                    mix(colorA, colorB, texCoord.x),
+                    texCoord.y
+                ).gba;
+                gl_FragColor = vec4(hsv2rgb(hsva.rgb), hsva.a);
+            }
         }
     `);
     gl.compileShader(fragmentShader);
@@ -211,6 +241,7 @@ function render() {
         colorB: gl.getUniformLocation(shaderProgram, 'colorB'),
         colorC: gl.getUniformLocation(shaderProgram, 'colorC'),
         colorD: gl.getUniformLocation(shaderProgram, 'colorD'),
+        colorsInHsv: gl.getUniformLocation(shaderProgram, 'colorsInHsv'),
     };
 
     for(let x = 0; x < colorGrid.width - 1; x++) {
@@ -253,6 +284,9 @@ function render() {
             );
             gl.enableVertexAttribArray(attribLocations.colorPosition);
 
+            const useHsvBlending = false;
+            gl.uniform1i(uniformPositions.colorsInHsv, useHsvBlending ? 1 : 0);
+
             [
                 [uniformPositions.colorA, colorGrid.extrapolatedAt(x, y + 1)],
                 [uniformPositions.colorB, colorGrid.extrapolatedAt(x + 1, y + 1)],
@@ -262,8 +296,16 @@ function render() {
                 if(!color) {
                     gl.uniform4fv(uPos, [0, 0, 0, 0]);
                 }else{
-                    gl.uniform4fv(uPos, color._asRgb().map(v => v / 255.0));
-
+                    if(useHsvBlending) {
+                        gl.uniform4fv(uPos, [
+                            color.h() / 360.0,
+                            color.s() / 100.0,
+                            color.v() / 100.0,
+                            color.a() / 255.0,
+                        ]);
+                    }else{
+                        gl.uniform4fv(uPos, color._asRgb().map(v => v / 255.0));
+                    }
                 }
             });
 
