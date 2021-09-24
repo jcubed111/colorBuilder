@@ -160,6 +160,18 @@ class Color extends Model{
         // return a contrasting color for text on top of this color
         return this.v() - 0.5*this.s() > 35 ? '#000' : '#fff';
     }
+
+    plus(b) {
+        // always do the math in the mode of b.
+        let converted = b.isRgb ? this._asRgb() : this._asHsv();
+
+        let result = new Color();
+        result.isRgb = b.isRgb;
+        result.value = converted.map((v, i) => v + b.value[i]);
+        if(!result.isRgb) result.value[0] = mod(result.value[0], 360);
+
+        return result;
+    }
 };
 
 class ColorPointer extends Model{

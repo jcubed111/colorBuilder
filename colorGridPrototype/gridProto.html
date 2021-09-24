@@ -1,0 +1,60 @@
+<style>
+    .swatch{
+        width: 32px;
+        height: 32px;
+        display: inline-block;
+        vertical-align: middle;
+        border-radius: 5px;
+    }
+
+    .colorInputArea{
+        background-image: url('../checkers.png');
+        display: inline-block;
+        padding: 5px;
+    }
+
+    input{
+        width: 90px;
+        padding: 5px;
+        font-family: Consolas, monospace;
+        display: inline-block;
+        vertical-align: middle;
+    }
+</style>
+
+
+<canvas id="render" width=500 height=500></canvas>
+
+<br/><br/>
+
+<div class="colorInputArea">
+    <span class="swatch" id="e0x2"></span><span class="swatch" id="e1x2"></span><span class="swatch" id="e2x2"></span>
+    <br/>
+    <span class="swatch" id="e0x1"></span><span class="swatch" id="e1x1"></span><span class="swatch" id="e2x1"></span>
+    <br/>
+    <span class="swatch" id="e0x0"></span><span class="swatch" id="e1x0"></span><span class="swatch" id="e2x0"></span>
+</div>
+
+<br/><br/>
+
+<div class="colorInputArea">
+    <span class="swatch" id="s0x2"></span> <input type="text" id="i0x2"/>
+    <span class="swatch" id="s1x2"></span> <input type="text" id="i1x2"/>
+    <span class="swatch" id="s2x2"></span> <input type="text" id="i2x2"/>
+    <br/>
+    <span class="swatch" id="s0x1"></span> <input type="text" id="i0x1"/>
+    <span class="swatch" id="s1x1"></span> <input type="text" id="i1x1"/>
+    <span class="swatch" id="s2x1"></span> <input type="text" id="i2x1"/>
+    <br/>
+    <span class="swatch" id="s0x0"></span> <input type="text" id="i0x0"/>
+    <span class="swatch" id="s1x0"></span> <input type="text" id="i1x0"/>
+    <span class="swatch" id="s2x0"></span> <input type="text" id="i2x0"/>
+</div>
+
+
+
+
+<script src="../utils.js"></script>
+<script src="../Color.js"></script>
+<script src="gridProto.js"></script>
+

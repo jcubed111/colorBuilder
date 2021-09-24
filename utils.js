@@ -1,3 +1,21 @@
+function mod(a, b) {
+    return a - b * Math.floor(a / b);
+}
+function maxBy(arr, iteratee) {
+    return arr.reduce(([prevItem, prevRank], newItem) => {
+        let newRank = iteratee(newItem);
+        if(newRank > prevRank) {
+            return [newItem, newRank];
+        }else{
+            return [prevItem, prevRank];
+        }
+    }, [undefined, -Infinity])[0];
+}
+function angleSub(angle1, angle2) {
+    const diff = (angle1 - angle2 + 180) % 360 - 180;
+    return diff < -180 ? diff + 360 : diff;
+}
+
 function formatDecimal(n, digits) {
     return n.toFixed(digits).replace(/(\.[^0]*)0+$/, '$1').replace(/\.$/, '');
 }
