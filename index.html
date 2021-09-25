@@ -47,19 +47,55 @@
                 <div class="button copyPound"><i class="fal fa-copy"></i><span class='desc'>&nbsp;#,</span></div>
                 <div class="button copyPoundQ"><i class="fal fa-copy"></i><span class='desc'>"#",</span></div>
                 <div class="button copyPoundNewline"><i class="fal fa-copy"></i><span class='desc'>&nbsp;#&crarr;</span></div>
-                <!-- <div class="button paste"><i class="fal fa-paste"></i></div> -->
             </div>
         </div>
     </div>
 
     <div id="gradientController"></div>
+    <div id="gridControllerWrapper">
+        <div id="gridController">
+            <canvas id="gridRenderCanvas" width=144 height=144></canvas>
+            <div class="elementArea" style="width:2em; height:2em;">
+                <div class="gridSwatch active light" style="left:0em; bottom: 0em;">
+                    <div class="isActive"><i class="fal fa-pen"></i></div>
+                </div>
+                <div class="gridSwatch unlocked" style="left:1em; bottom: 0em;">
+                    <div class="isActive"><i class="fal fa-pen"></i></div>
+                </div>
+                <div class="gridSwatch" style="left:2em; bottom: 0em;">
+                    <div class="isActive"><i class="fal fa-pen"></i></div>
+                </div>
+                <div class="gridSwatch unlocked" style="left:0em; bottom: 1em;">
+                    <div class="isActive"><i class="fal fa-pen"></i></div>
+                </div>
+                <div class="gridSwatch unlocked" style="left:1em; bottom: 1em;">
+                    <div class="isActive"><i class="fal fa-pen"></i></div>
+                </div>
+                <div class="gridSwatch unlocked" style="left:2em; bottom: 1em;">
+                    <div class="isActive"><i class="fal fa-pen"></i></div>
+                </div>
+                <div class="gridSwatch" style="left:0em; bottom: 2em;">
+                    <div class="isActive"><i class="fal fa-pen"></i></div>
+                </div>
+                <div class="gridSwatch unlocked" style="left:1em; bottom: 2em;">
+                    <div class="isActive"><i class="fal fa-pen"></i></div>
+                </div>
+                <div class="gridSwatch unlocked" style="left:2em; bottom: 2em;">
+                    <div class="isActive"><i class="fal fa-pen"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div id="historyView">
         <div id="historyGradArea"></div>
         <div class="controlGroup">
             <div id="gradPasteButton" class="button pasteButton"><i class="fal fa-paste"></i><span class='desc'>import list</span></div>
         </div>
     </div>
+
     <canvas id="randomCanvas"></canvas>
+
 
     <template id="sliderTemplate">
          <div class="vbar">
@@ -86,6 +122,24 @@
             <div class="isActive"><i class="fal fa-pen"></i></div>
             <div class="duplicate"><i class="fal fa-clone"></i></div>
             <div class="delete"><i class="fal fa-trash"></i></div>
+        </div>
+    </template>
+
+    <template id="gridSwatch">
+        <div class="gridSwatch">
+            <div class="isActive"><i class="fal fa-pen"></i></div>
+        </div>
+    </template>
+
+    <template id="gridRowControl">
+        <div class="gridRowControl">
+            <div class="delete"><i class="fal fa-trash"></i></div>
+        </div>
+    </template>
+
+    <template id="gridGapControl">
+        <div class="gridGapControl">
+            <div class="add"><i class="fal fa-plus-square"></i></div>
         </div>
     </template>
 

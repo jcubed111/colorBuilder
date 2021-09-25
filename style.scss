@@ -498,6 +498,100 @@ input{
     color: #fff3;
 }
 
+#gridControllerWrapper{
+    position: absolute;
+    left: 250px;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    pointer-events: none;
+    justify-content: center;
+    z-index: 5;
+}
+#gridController{
+    pointer-events: auto;
+    background: #181818;
+    border: 1px solid #000;
+    border-radius: 8px;
+    position: relative;
+
+    font-size: 72px; // We define font size here to be used as em units in positioning
+
+    .elementArea{
+        position: relative;
+        margin: 32px;
+    }
+
+    #gridRenderCanvas{
+        position: absolute;
+        top: 32px;
+        left: 32px;
+        right: 32px;
+        bottom: 32px;
+        background-image: url(checkers.png);
+        width: auto;
+        height: auto;
+    }
+
+    .gridSwatch{
+        display: block;
+        box-sizing: border-box;
+        $radius: 26px;
+        width: $radius * 2;
+        height: $radius * 2;
+        border-radius: 4px;
+        position: absolute;
+        margin-left: -$radius;
+        margin-bottom: -$radius;
+
+        background-image: url(checkers.png);
+        background-position: center center;
+
+        border: 2px solid #000;
+        color: #000;
+
+        &.light{
+            border-color: #e7e7e7;
+            color: #e7e7e7;
+        }
+
+        &.unlocked{
+            border-style: dashed;
+            background: transparent;
+        }
+
+        // Add transitions for hover states
+        transition: all linear 0.05s;
+
+        .isActive{
+            position: absolute;
+            left: 50%;
+            bottom: 50%;
+            margin-bottom: -2px;
+            font-size: 20px;
+        }
+        &:not(.active) .isActive{
+            display: none;
+        }
+    }
+
+    &:not(:hover) .gridSwatch{
+        // The swatches get smaller when we aren't hovering
+
+        $radius: 8px;
+
+        width: $radius * 2;
+        height: $radius * 2;
+        border-radius: $radius;
+        margin-left: -$radius;
+        margin-bottom: -$radius;
+        border-color: transparent;
+
+        &.unlocked{ opacity: 0; }
+    }
+}
+
 #historyView{
     position: absolute;
     width: 200px;
