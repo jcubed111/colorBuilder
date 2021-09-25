@@ -1,6 +1,9 @@
 let activeColor = new ColorPointer();
+
 let gradC = new GradientController(activeColor);
-new GradientViewController(gradC);
+let gridC = new GridController(activeColor);
+
+new ModeCopyController(gradC);
 
 let sliderArea = document.getElementById('sliderArea');
 sliderArea.append((new RedSlider(activeColor)).el);

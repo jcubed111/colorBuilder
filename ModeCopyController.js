@@ -1,4 +1,4 @@
-class GradientViewController extends View{
+class ModeCopyController extends View{
     el() {
         return document.getElementById('gradientViewController');
     }
