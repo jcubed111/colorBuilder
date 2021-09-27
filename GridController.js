@@ -9,9 +9,9 @@ class GridController extends View{
         this.colorGrid = new ColorGrid(3, 3);
 
         this.subViews = [];
-        this.initSubViews();
 
         this.colorGrid.onChange(e => this.render());
+        this.render();
     }
 
     initSubViews() {
@@ -32,6 +32,18 @@ class GridController extends View{
     }
 
     render() {
+        if(this.width != this.colorGrid.width || this.height != this.colorGrid.height) {
+            this.renderResize();
+        }
+        this.renderBlend();
+    }
+
+    renderResize() {
+        this.width = this.colorGrid.width;
+        this.height = this.colorGrid.height;
+
+        this.initSubViews();
+
         this.$('.elementArea').style.width = `${this.colorGrid.width - 1}em`;
         this.$('.elementArea').style.height = `${this.colorGrid.height - 1}em`;
 
@@ -41,8 +53,6 @@ class GridController extends View{
         let gridSize = parseInt(getComputedStyle(this.el).getPropertyValue('font-size'));
         this.$('#gridRenderCanvas').width = (this.colorGrid.width - 1) * gridSize;
         this.$('#gridRenderCanvas').height = (this.colorGrid.height - 1) * gridSize;
-
-        this.renderBlend();
     }
 
     renderBlend() {
@@ -69,7 +79,7 @@ class GridController extends View{
             }
         `);
         gl.compileShader(vertexShader);
-        console.log(gl.getShaderInfoLog(vertexShader));
+        // console.log(gl.getShaderInfoLog(vertexShader));
 
         const fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
         gl.shaderSource(fragmentShader, `
@@ -122,13 +132,13 @@ class GridController extends View{
             }
         `);
         gl.compileShader(fragmentShader);
-        console.log(gl.getShaderInfoLog(fragmentShader));
+        // console.log(gl.getShaderInfoLog(fragmentShader));
 
         const shaderProgram = gl.createProgram();
         gl.attachShader(shaderProgram, vertexShader);
         gl.attachShader(shaderProgram, fragmentShader);
         gl.linkProgram(shaderProgram);
-        console.log(gl.getProgramInfoLog(shaderProgram));
+        // console.log(gl.getProgramInfoLog(shaderProgram));
         gl.useProgram(shaderProgram);
         gl.viewport(0, 0, canvas.width, canvas.height);
         gl.disable(gl.BLEND);

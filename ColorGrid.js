@@ -15,6 +15,28 @@ class ColorGrid extends Model{
         return this.colors[mod(x, this.width)][mod(y, this.height)];
     }
 
+    resetTo(width, height, colors) {
+        // colors: Array2d[x, y, Color]
+
+        this.getDefinedColors().forEach(
+            ([x, y, color]) => this.stopListeningTo(color)
+        );
+
+        this.width = width;
+        this.height = height;
+        this.colors = Array(width).fill(0).map((_, x) =>
+            Array(height).fill(0).map((_, y) =>
+                colors[x][y]?.clone() || null
+            )
+        );
+
+        this.getDefinedColors().forEach(
+            ([x, y, color]) => this.startListeningTo(color)
+        );
+
+        this.triggerChange();
+    }
+
     forEachPos(cb) {
         for(let y = 0; y < this.height; y++) {
             for(let x = 0; x < this.width; x++) {
@@ -85,7 +107,7 @@ class ColorGrid extends Model{
     }
 
     extrapolatedAt(x, y, defaultReturn = null) {
-        if(this.at(x, y) != null) return this.at(x, y);
+        if(this.at(x, y) != null) return this.at(x, y).clone();
 
         const nearestColor = maxBy(
             this.getDefinedColors(),

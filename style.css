@@ -21,7 +21,7 @@ body {
 }
 
 .hidden {
-  display: none;
+  display: none !important;
 }
 
 #sliderArea {
@@ -326,13 +326,20 @@ input.invalid {
 }
 
 #modeCopyController {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
+  display: grid;
+  grid-gap: 5px;
+}
+#modeCopyController .mainMode {
+  grid-area: 1/1/2/3;
 }
 #modeCopyController .previews {
-  margin-right: 5px;
-  margin-bottom: 0;
+  grid-area: 2/1/3/2;
+}
+#modeCopyController .copys {
+  grid-area: 2/2/3/3;
+}
+#modeCopyController .controlGroup {
+  margin: 0;
 }
 #modeCopyController .previews .button {
   text-align: center;
