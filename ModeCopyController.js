@@ -1,17 +1,19 @@
 class ModeCopyController extends View{
     el() {
-        return document.getElementById('gradientViewController');
+        return document.getElementById('modeCopyController');
     }
 
     constructor(gradController, gridController) {
         super();
         this.gradController = gradController;
+        this.gridController = gridController;
+        this.activeMode = 'gradient';
         this.render();
 
-        this.$('.mode_gradient').addEventListener('click', e => this.setMode('gradient'));
-        this.$('.mode_swatches').addEventListener('click', e => this.setMode('swatches'));
-        this.$('.mode_random').addEventListener('click', e =>   this.setMode('random'));
-        this.$('.mode_bars').addEventListener('click', e =>     this.setMode('bars'));
+        this.$('.preview_gradient').addEventListener('click', e => this.setPreview('gradient'));
+        this.$('.preview_swatches').addEventListener('click', e => this.setPreview('swatches'));
+        this.$('.preview_random').addEventListener('click', e =>   this.setPreview('random'));
+        this.$('.preview_bars').addEventListener('click', e =>     this.setPreview('bars'));
         this.$('.copy0x').addEventListener('click', e =>           this.copyAs(e, '0x', '', ', '));
         this.$('.copyPound').addEventListener('click', e =>        this.copyAs(e, '#',  '', ', '));
         this.$('.copyPoundQ').addEventListener('click', e =>       this.copyAs(e, '#', '"', ', '));
@@ -20,12 +22,14 @@ class ModeCopyController extends View{
 
     render() {
         ['gradient', 'swatches', 'random', 'bars'].forEach(m => {
-            this.$('.mode_' + m).classList.toggle('active', this.gradController.mode == m);
+            this.$('.preview_' + m).classList.toggle('active', this.gradController.previewMode == m);
         });
+        this.gradController.el.classList.toggle('hidden', this.activeMode != 'gradient');
+        this.gridController.el.classList.toggle('hidden', this.activeMode != 'grid');
     }
 
-    setMode(m) {
-        this.gradController.mode = m;
+    setPreview(m) {
+        this.gradController.previewMode = m;
         this.gradController.render();
         this.render();
     }

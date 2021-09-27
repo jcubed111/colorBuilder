@@ -21,6 +21,10 @@ body{
     font-family: Inconsolata, monospace;
 }
 
+.hidden{
+    display: none;
+}
+
 #sliderArea{
     // display: flex;
     // flex-direction: row;
@@ -69,7 +73,7 @@ body{
         grid-column: 2 / 5;
         grid-row: 1 / 3;
     }
-    #gradientViewController{
+    #modeCopyController{
         grid-column: 1 / 2;
         grid-row: 1 / 2;
     }
@@ -367,13 +371,13 @@ input{
 }
 
 
-#gradientViewController{
+#modeCopyController{
     @extend %sliderBlock;
     display: flex;
     flex-direction: row;
     align-items: flex-start;
 
-    .modes{
+    .previews{
         margin-right: 5px;
         margin-bottom: 0;
         .button{

@@ -7,7 +7,7 @@ class GradientController extends View{
         super();
         this.editColor = editColor;
         this.subViews = [];
-        this.mode = 'gradient'; // gradient, swatches, bars, random
+        this.previewMode = 'gradient'; // gradient, swatches, bars, random
         this.addSubView(0);
         this.setActiveView(this.subViews[0]);
         this.reorderSubViews();
@@ -96,7 +96,7 @@ class GradientController extends View{
 
     render() {
         let views = this.subViews.length == 1 ? [this.subViews[0], this.subViews[0]] : this.subViews;
-        this['render_'+this.mode](views);
+        this['render_'+this.previewMode](views);
     }
 
     getColors() {

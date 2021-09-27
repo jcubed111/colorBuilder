@@ -35,12 +35,15 @@
                 <div class="sliderMarker"></div>
             </div>
         </div>
-        <div id="gradientViewController">
-            <div class="controlGroup vertical modes">
-                <div class="button mode_gradient"><i class="fal fa-arrows-alt-v"></i></div>
-                <div class="button mode_bars"><i class="fad fa-bars"></i></div>
-                <div class="button mode_swatches"><i class="fal fa-bring-forward"></i></div>
-                <div class="button mode_random"><i class="fad fa-th"></i></div>
+        <div id="modeCopyController">
+            <div class="contorlGroup gridToggle">
+                div.button.mode_grad
+            </div>
+            <div class="controlGroup vertical previews">
+                <div class="button preview_gradient"><i class="fal fa-arrows-alt-v"></i></div>
+                <div class="button preview_bars"><i class="fad fa-bars"></i></div>
+                <div class="button preview_swatches"><i class="fal fa-bring-forward"></i></div>
+                <div class="button preview_random"><i class="fad fa-th"></i></div>
             </div>
             <div class="controlGroup vertical copys">
                 <div class="button copy0x"><i class="fal fa-copy"></i><span class='desc'>0x,</span></div>
@@ -55,35 +58,7 @@
     <div id="gridControllerWrapper">
         <div id="gridController">
             <canvas id="gridRenderCanvas" width=144 height=144></canvas>
-            <div class="elementArea" style="width:2em; height:2em;">
-                <div class="gridSwatch active light" style="left:0em; bottom: 0em;">
-                    <div class="isActive"><i class="fal fa-pen"></i></div>
-                </div>
-                <div class="gridSwatch unlocked" style="left:1em; bottom: 0em;">
-                    <div class="isActive"><i class="fal fa-pen"></i></div>
-                </div>
-                <div class="gridSwatch" style="left:2em; bottom: 0em;">
-                    <div class="isActive"><i class="fal fa-pen"></i></div>
-                </div>
-                <div class="gridSwatch unlocked" style="left:0em; bottom: 1em;">
-                    <div class="isActive"><i class="fal fa-pen"></i></div>
-                </div>
-                <div class="gridSwatch unlocked" style="left:1em; bottom: 1em;">
-                    <div class="isActive"><i class="fal fa-pen"></i></div>
-                </div>
-                <div class="gridSwatch unlocked" style="left:2em; bottom: 1em;">
-                    <div class="isActive"><i class="fal fa-pen"></i></div>
-                </div>
-                <div class="gridSwatch" style="left:0em; bottom: 2em;">
-                    <div class="isActive"><i class="fal fa-pen"></i></div>
-                </div>
-                <div class="gridSwatch unlocked" style="left:1em; bottom: 2em;">
-                    <div class="isActive"><i class="fal fa-pen"></i></div>
-                </div>
-                <div class="gridSwatch unlocked" style="left:2em; bottom: 2em;">
-                    <div class="isActive"><i class="fal fa-pen"></i></div>
-                </div>
-            </div>
+            <div class="elementArea" style="width:2em; height:2em;"></div>
         </div>
     </div>
 
@@ -126,7 +101,7 @@
     </template>
 
     <template id="gridSwatch">
-        <div class="gridSwatch">
+        <div class="gridSwatch active light unlocked">
             <div class="isActive"><i class="fal fa-pen"></i></div>
         </div>
     </template>
