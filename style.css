@@ -509,7 +509,6 @@ input.invalid {
   transition: all linear 0.05s;
 }
 #gridController .gridSwatch.light {
-  border-color: #e7e7e7;
   color: #e7e7e7;
 }
 #gridController .gridSwatch.unlocked {

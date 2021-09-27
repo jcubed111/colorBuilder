@@ -75,10 +75,11 @@ class GradientController extends View{
         if(this.subViews.length == 1) return;
         let i = this.subViews.indexOf(v);
         this.subViews.splice(i, 1);
+        v.remove();
+
         if(v.isActive) {
             this.setActiveView(this.subViews[i] || this.subViews[i-1]);
         }
-        this.el.removeChild(v.el);
         this.reorderSubViews();
         this.render();
         this.triggerChange();
@@ -185,7 +186,7 @@ class GradientSwatch extends View {
         super();
         this.parent = parent;
         this.targetColor = color;
-        color.onChange(c => this.render(c));
+        this.colorListener = this.targetColor.onChange(c => this.render(c));
         this.render();
 
         this.$('.addBefore').addEventListener('click', e => {
@@ -211,6 +212,11 @@ class GradientSwatch extends View {
         this.el.addEventListener('click', e => {
             this.parent.setActiveView(this);
         });
+    }
+
+    remove() {
+        this.targetColor.offChange(this.colorListener);
+        super.remove();
     }
 
     getIndex() {

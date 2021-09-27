@@ -8,4 +8,8 @@ class View extends Model{
     $(s) {
         return this.el.querySelector(s);
     }
+
+    remove() {
+        this.el.remove();
+    }
 }

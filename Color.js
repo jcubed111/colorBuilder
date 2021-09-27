@@ -156,9 +156,13 @@ class Color extends Model{
         return rgb(...this._asRgb());
     }
 
+    useLightContrast() {
+        // returns whether light colors contrast better with this color
+        return this.v() - 0.5 * this.s() <= 35;
+    }
     getTextColor() {
         // return a contrasting color for text on top of this color
-        return this.v() - 0.5*this.s() > 35 ? '#000' : '#fff';
+        this.useLightContrast() ? '#fff' : '#000';
     }
 
     plus(b) {
@@ -202,6 +206,10 @@ class ColorPointer extends Model{
 
         // trigger an initial change
         onChangeCb();
+    }
+
+    isPointingTo(color) {
+        return this.to === color;
     }
 
     setRgb(...args) { return this.to.setRgb(...args); }

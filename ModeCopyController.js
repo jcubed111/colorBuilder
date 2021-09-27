@@ -3,7 +3,7 @@ class ModeCopyController extends View{
         return document.getElementById('gradientViewController');
     }
 
-    constructor(gradController) {
+    constructor(gradController, gridController) {
         super();
         this.gradController = gradController;
         this.render();
@@ -16,7 +16,6 @@ class ModeCopyController extends View{
         this.$('.copyPound').addEventListener('click', e =>        this.copyAs(e, '#',  '', ', '));
         this.$('.copyPoundQ').addEventListener('click', e =>       this.copyAs(e, '#', '"', ', '));
         this.$('.copyPoundNewline').addEventListener('click', e => this.copyAs(e, '#',  '', '\n'));
-        // this.$('.paste').addEventListener('click', e => this.paste());
     }
 
     render() {
