@@ -1,4 +1,5 @@
 let activeColor = new ColorPointer();
+let previewMode = "smooth";
 
 let gradientController = new GradientController(activeColor);
 let gridController = new GridController(activeColor);

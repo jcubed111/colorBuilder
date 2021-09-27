@@ -14,7 +14,7 @@ class ModeCopyController extends View{
         this.$('.mode_gradient').addEventListener('click', e =>    this.setMode('gradient'));
         this.$('.mode_grid').addEventListener('click', e =>        this.setMode('grid'));
 
-        this.$('.preview_gradient').addEventListener('click', e => this.setPreview('gradient'));
+        this.$('.preview_smooth').addEventListener('click', e =>   this.setPreview('smooth'));
         this.$('.preview_swatches').addEventListener('click', e => this.setPreview('swatches'));
         this.$('.preview_random').addEventListener('click', e =>   this.setPreview('random'));
         this.$('.preview_bars').addEventListener('click', e =>     this.setPreview('bars'));
@@ -34,16 +34,16 @@ class ModeCopyController extends View{
         ['gradient', 'grid'].forEach(m => {
             this.$('.mode_' + m).classList.toggle('active', this.activeMode == m);
         });
-        ['gradient', 'swatches', 'random', 'bars'].forEach(m => {
-            this.$('.preview_' + m).classList.toggle('active', this.gradController.previewMode == m);
+        ['smooth', 'swatches', 'random', 'bars'].forEach(m => {
+            this.$('.preview_' + m).classList.toggle('active', previewMode == m);
         });
         this.gradController.el.classList.toggle('hidden', this.activeMode != 'gradient');
         this.gridController.el.classList.toggle('hidden', this.activeMode != 'grid');
 
-        this.renderVisibleCopyButtons();
+        this.renderVisibleButtons();
     }
 
-    renderVisibleCopyButtons() {
+    renderVisibleButtons() {
         [
             ['.copy0x',            'gradient'],
             ['.copyPound',         'gradient'],
@@ -100,8 +100,12 @@ class ModeCopyController extends View{
     }
 
     setPreview(m) {
-        this.gradController.previewMode = m;
-        this.gradController.render();
+        previewMode = m;
+        if(this.activeMode == 'grid') {
+            this.gridController.render();
+        }else{
+            this.gradController.render();
+        }
         this.render();
     }
 

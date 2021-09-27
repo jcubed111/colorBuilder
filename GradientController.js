@@ -96,7 +96,7 @@ class GradientController extends View{
 
     render() {
         let views = this.subViews.length == 1 ? [this.subViews[0], this.subViews[0]] : this.subViews;
-        this['render_'+this.previewMode](views);
+        this['render_' + previewMode](views);
     }
 
     getColors() {
@@ -124,7 +124,7 @@ class GradientController extends View{
         return color.toString();
     }
 
-    render_gradient(views) {
+    render_smooth(views) {
         document.getElementById('randomCanvas').style.display = 'none';
         document.body.style.backgroundImage = colorsToBgImage(
             views.map(v => v.targetColor.toString())
