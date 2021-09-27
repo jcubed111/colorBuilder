@@ -74,7 +74,7 @@ class ColorGrid extends Model{
     }
 
     getDenseColorArray() {
-        return map2d(this.colors, (x, y) => this.extrapolatedAt(x, y));
+        return map2d(this.colors, (_, x, y) => this.extrapolatedAt(x, y));
     }
 
     getDefinedColors() { // : List[(x, y, color)]

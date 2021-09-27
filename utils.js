@@ -15,7 +15,7 @@ function maxBy(arr, iteratee) {
 function map2d(arr2d, cb) {
     return arr2d.map(
         (arr, i) => arr.map(
-            (el, j) => cb(i, j, el, arr2d)
+            (el, j) => cb(el, i, j, arr2d)
         )
     );
 }

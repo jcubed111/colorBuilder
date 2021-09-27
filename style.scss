@@ -613,6 +613,8 @@ input{
         height: 30px;
         border-bottom-right-radius: 8px;
         border-top-right-radius: 8px;
+        display: grid;
+        overflow: hidden;
     }
 
     .controlGroup{

@@ -61,6 +61,16 @@ class ModeCopyController extends View{
     setMode(m) {
         this[this.activeMode + '2' + m]?.();
         this.activeMode = m;
+        if(this.activeMode == 'grid') {
+            this.gridController.colorGrid.triggerChange();
+        }else{
+            this.gradController.triggerChange();
+        }
+        this.render();
+    }
+
+    setModeSilent(m) {
+        this.activeMode = m;
         this.render();
     }
 
@@ -115,7 +125,7 @@ class ModeCopyController extends View{
         }else if(this.activeMode == 'grid') {
             let colorStrings = map2d(
                 this.gridController.colorGrid.getDenseColorArray(),
-                (x, y, c) => quote + format + hex(c.r(), c.g(), c.b(), c.a()).slice(1) + quote,
+                (c, x, y) => quote + format + hex(c.r(), c.g(), c.b(), c.a()).slice(1) + quote,
             );
 
             if(gridFormat == 'visualGrid') {
@@ -124,7 +134,7 @@ class ModeCopyController extends View{
                 );
                 colorStrings = map2d(
                     colorStrings,
-                    (x, y, color) => {
+                    (color, x, y) => {
                         return color + " ".repeat(maxLenByCol[x] - color.length);
                     }
                 );

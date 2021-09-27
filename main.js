@@ -1,9 +1,9 @@
 let activeColor = new ColorPointer();
 
-let gradC = new GradientController(activeColor);
-let gridC = new GridController(activeColor);
+let gradientController = new GradientController(activeColor);
+let gridController = new GridController(activeColor);
 
-new ModeCopyController(activeColor, gradC, gridC);
+let moveCopyController = new ModeCopyController(activeColor, gradientController, gridController);
 
 let sliderArea = document.getElementById('sliderArea');
 sliderArea.append((new RedSlider(activeColor)).el);
@@ -27,4 +27,4 @@ activeColor.setB(Math.floor(50+Math.random()*150));
 
 // initialize this after setting the default color so
 // it doesn't try to save
-new HistoryController(gradC);
+new HistoryController(gradientController, gridController, moveCopyController);
