@@ -69,6 +69,17 @@ function prettyHsv(h, s, v, a=255) {
     }
 }
 
+function mixColors(a, b, factor) {
+    // return a * (1 - factor) + b * factor
+    const t = 1.0 - factor;
+    let color = new Color();
+    color.setR(a.r() * t + b.r() * factor);
+    color.setG(a.g() * t + b.g() * factor);
+    color.setB(a.b() * t + b.b() * factor);
+    color.setA(a.a() * t + b.a() * factor);
+    return color;
+}
+
 async function toastSuccess(button) {
     let el = document.createElement('div');
     el.className = 'buttonSuccessToast';
@@ -81,6 +92,10 @@ async function toastSuccess(button) {
 }
 
 function colorsToBgImage(colors, smooth=true, dir='to bottom') {
+    // linear gradient doesn't work with only one color
+    if(colors.length == 1) {
+        colors = [colors[0], colors[0]];
+    }
     if(smooth) {
         return `
             linear-gradient(${dir}, ${colors.join(',')}),

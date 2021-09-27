@@ -94,86 +94,14 @@ class GradientController extends View{
         this.setActiveView(this.subViews[0]);
     }
 
-    render() {
-        let views = this.subViews.length == 1 ? [this.subViews[0], this.subViews[0]] : this.subViews;
-        this['render_' + previewMode](views);
-    }
+    render() {}
 
     getColors() {
         return this.subViews.map(v => v.targetColor.clone());
     }
 
-    getColorAt(i) {
-        if(this.subViews.length == 0) return null;
-        if(this.subViews.length == 1) return this.subViews[0].targetColor.toString();
-        if(i >= 1) return this.subViews[this.subViews.length-1].targetColor.toString();
-        if(i <= 0) return this.subViews[0].targetColor.toString();
-
-        i *= this.subViews.length - 1;
-        let a = Math.floor(i), b = Math.ceil(i), s = i - a, t = 1 - s;
-        let colorA = this.subViews[a].targetColor;
-        let colorB = this.subViews[b].targetColor;
-
-        let color = new Color();
-        if(colorA.a() + colorB.a() != 0) {
-            color.setA(colorA.a()*t + colorB.a()*s);
-            color.setR((colorA.r()*colorA.a()*t + colorB.r()*colorB.a()*s)/(color.a()));
-            color.setG((colorA.g()*colorA.a()*t + colorB.g()*colorB.a()*s)/(color.a()));
-            color.setB((colorA.b()*colorA.a()*t + colorB.b()*colorB.a()*s)/(color.a()));
-        }
-        return color.toString();
-    }
-
-    render_smooth(views) {
-        document.getElementById('randomCanvas').style.display = 'none';
-        document.body.style.backgroundImage = colorsToBgImage(
-            views.map(v => v.targetColor.toString())
-        );
-    }
-
-    render_swatches() {
-        document.body.style.backgroundImage = `none`;
-        document.body.style.background = `#0000`;
-        let c = document.getElementById('randomCanvas');
-        c.style.display = 'block';
-        c.width = window.innerWidth;
-        c.height = window.innerHeight;
-        let ctx = c.getContext('2d');
-        const size = 53;
-        for(let x=0; x < window.innerWidth; x += size) {
-            for(let y=0; y < window.innerHeight; y += size) {
-                let i = Math.floor(Math.random() * this.subViews.length);
-                ctx.fillStyle = (
-                    this.subViews[i] || {targetColor: '#0000'}
-                ).targetColor.toString();
-                ctx.fillRect(x, y, size, size);
-            }
-        }
-    }
-
-    render_random() {
-        document.body.style.backgroundImage = `none`;
-        document.body.style.background = `#0000`;
-        let c = document.getElementById('randomCanvas');
-        c.style.display = 'block';
-        c.width = window.innerWidth;
-        c.height = window.innerHeight;
-        let ctx = c.getContext('2d');
-        const size = 53;
-        for(let x=0; x < window.innerWidth; x += size) {
-            for(let y=0; y < window.innerHeight; y += size) {
-                ctx.fillStyle = this.getColorAt(Math.random());
-                ctx.fillRect(x, y, size, size);
-            }
-        }
-    }
-
-    render_bars(views) {
-        document.getElementById('randomCanvas').style.display = 'none';
-        document.body.style.backgroundImage = colorsToBgImage(
-            views.map(v => v.targetColor.toString()),
-            false
-        );
+    toColorSet() {
+        return new ColorSet([this.getColors()]);
     }
 }
 

@@ -9,6 +9,7 @@ class ModeCopyController extends View{
         this.gradController = gradController;
         this.gridController = gridController;
         this.activeMode = 'gradient';
+        this.previewController = new PreviewController(this);
         this.render();
 
         this.$('.mode_gradient').addEventListener('click', e =>    this.setMode('gradient'));
@@ -28,6 +29,17 @@ class ModeCopyController extends View{
         this.$('.copy2dArrayPound').addEventListener('click', e =>  this.copyAs(e, '#',  '', ', ', 'array2d'));
         this.$('.copy2dArrayPoundQ').addEventListener('click', e => this.copyAs(e, '#', '"', ', ', 'array2d'));
         this.$('.copyVisualGrid').addEventListener('click', e =>    this.copyAs(e, '#',  '', ' ',  'visualGrid'));
+
+        gradController.onChange(e => {
+            if(this.activeMode == 'gradient') {
+                this.previewController.render(gradController.toColorSet())
+            }
+        });
+        gridController.colorGrid.onChange(e => {
+            if(this.activeMode == 'grid') {
+                this.previewController.render(gridController.colorGrid.toColorSet())
+            }
+        });
     }
 
     render() {
@@ -35,7 +47,7 @@ class ModeCopyController extends View{
             this.$('.mode_' + m).classList.toggle('active', this.activeMode == m);
         });
         ['smooth', 'swatches', 'random', 'bars'].forEach(m => {
-            this.$('.preview_' + m).classList.toggle('active', previewMode == m);
+            this.$('.preview_' + m).classList.toggle('active', this.previewController.previewMode == m);
         });
         this.gradController.el.classList.toggle('hidden', this.activeMode != 'gradient');
         this.gridController.el.classList.toggle('hidden', this.activeMode != 'grid');
@@ -100,12 +112,12 @@ class ModeCopyController extends View{
     }
 
     setPreview(m) {
-        previewMode = m;
-        if(this.activeMode == 'grid') {
-            this.gridController.render();
-        }else{
-            this.gradController.render();
-        }
+        this.previewController.setMode(
+            m,
+            this.activeMode == 'grid'
+                ? this.gridController.colorGrid.toColorSet()
+                : this.gradController.toColorSet(),
+        )
         this.render();
     }
 

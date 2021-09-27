@@ -45,6 +45,10 @@ class ColorGrid extends Model{
         }
     }
 
+    toColorSet() {
+        return new ColorSet(this.getDenseColorArray());
+    }
+
     initSwatch(x, y) {
         if(this.at(x, y) != null) {
             return;
