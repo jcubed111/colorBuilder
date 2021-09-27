@@ -31,6 +31,22 @@ class GridController extends View{
         this.subViews.forEach(v => this.$('.elementArea').appendChild(v.el));
     }
 
+    resetTo(...args) {
+        this.colorGrid.resetTo(...args);
+        this.ensureActiveColor();
+    }
+
+    ensureActiveColor() {
+        // if none of the colors in the grid are the active color,
+        // change the active color.
+        if(!this.colorGrid.getDefinedColors().some(
+            ([x, y, color]) => this.colorPointer.isPointingTo(color)
+        )) {
+            let [x, y, targetColor] = this.colorGrid.getDefinedColors()[0];
+            this.colorPointer.pointTo(targetColor);
+        }
+    }
+
     render() {
         if(this.width != this.colorGrid.width || this.height != this.colorGrid.height) {
             this.renderResize();
@@ -273,14 +289,8 @@ class GridSwatchController extends View{
         }
         // if this color is not null, set it to null
         this.colorGrid.unlockSwatch(this.x, this.y);
-        // if none of the colors in the grid are active,
-        // change the active color.
-        if(!this.colorGrid.getDefinedColors().some(
-            ([x, y, color]) => this.colorPointer.isPointingTo(color)
-        )) {
-            let [x, y, targetColor] = this.colorGrid.getDefinedColors()[0];
-            this.colorPointer.pointTo(targetColor);
-        }
+
+        GridController.prototype.ensureActiveColor.apply(this);
     }
 
     render() {
