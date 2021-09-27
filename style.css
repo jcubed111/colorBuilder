@@ -249,7 +249,7 @@ input.invalid {
   border-left: 0px none;
   text-align: left;
 }
-.controlGroup.vertical .button:not(:first-child) {
+.controlGroup.vertical .button:not(:first-child):not(.first) {
   border-top: 1px solid #000;
 }
 

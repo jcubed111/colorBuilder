@@ -11,6 +11,23 @@ function maxBy(arr, iteratee) {
         }
     }, [undefined, -Infinity])[0];
 }
+
+function map2d(arr2d, cb) {
+    return arr2d.map(
+        (arr, i) => arr.map(
+            (el, j) => cb(i, j, el, arr2d)
+        )
+    );
+}
+
+function transpose(arr2d) {
+    return arr2d[0].map((_, i) => arr2d.map(arr => arr[i]))
+}
+
+function clamp(x, minVal, maxVal) {
+    return Math.max(minVal, Math.min(maxVal, x));
+}
+
 function angleSub(angle1, angle2) {
     const diff = (angle1 - angle2 + 180) % 360 - 180;
     return diff < -180 ? diff + 360 : diff;

@@ -176,6 +176,23 @@ class Color extends Model{
 
         return result;
     }
+
+    normalized() {
+        // return a new color clamped to the available range.
+        let result = new Color();
+        result.isRgb = this.isRgb;
+        if(this.isRgb) {
+            result.value = this.value.map(v => clamp(v, 0, 255));
+        }else{
+            result.value = [
+                mod(this.value[0], 360),
+                clamp(this.value[1], 0, 100),
+                clamp(this.value[2], 0, 100),
+                clamp(this.value[3], 0, 255),
+            ];
+        }
+        return result;
+    }
 };
 
 class ColorPointer extends Model{

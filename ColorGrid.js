@@ -73,6 +73,10 @@ class ColorGrid extends Model{
         this.colorListeners.delete(color);
     }
 
+    getDenseColorArray() {
+        return map2d(this.colors, (x, y) => this.extrapolatedAt(x, y));
+    }
+
     getDefinedColors() { // : List[(x, y, color)]
         return this.colors
             .flatMap((col, x) => col.map((color, y) => [x, y, color]))
@@ -156,7 +160,8 @@ class ColorGrid extends Model{
 
         return basisColor
             .plus(this.modeDiff(v1, v2, (y - y0) / ((y1 - y2) || 1), this.vertMode))
-            .plus(this.modeDiff(h1, h2, (x - x0) / ((x1 - x2) || 1), this.horzMode));
+            .plus(this.modeDiff(h1, h2, (x - x0) / ((x1 - x2) || 1), this.horzMode))
+            .normalized();
     }
 
     modeDiff(c1, c2, factor, mode) {

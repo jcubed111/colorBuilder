@@ -19,10 +19,15 @@ class ModeCopyController extends View{
         this.$('.preview_random').addEventListener('click', e =>   this.setPreview('random'));
         this.$('.preview_bars').addEventListener('click', e =>     this.setPreview('bars'));
 
-        this.$('.copy0x').addEventListener('click', e =>           this.copyAs(e, '0x', '', ', '));
-        this.$('.copyPound').addEventListener('click', e =>        this.copyAs(e, '#',  '', ', '));
-        this.$('.copyPoundQ').addEventListener('click', e =>       this.copyAs(e, '#', '"', ', '));
-        this.$('.copyPoundNewline').addEventListener('click', e => this.copyAs(e, '#',  '', '\n'));
+        this.$('.copy0x').addEventListener('click', e =>            this.copyAs(e, '0x', '', ', '));
+        this.$('.copyPound').addEventListener('click', e =>         this.copyAs(e, '#',  '', ', '));
+        this.$('.copyPoundQ').addEventListener('click', e =>        this.copyAs(e, '#', '"', ', '));
+        this.$('.copyPoundNewline').addEventListener('click', e =>  this.copyAs(e, '#',  '', '\n'));
+
+        this.$('.copy2dArray0x').addEventListener('click', e =>     this.copyAs(e, '0x', '', ', ', 'array2d'));
+        this.$('.copy2dArrayPound').addEventListener('click', e =>  this.copyAs(e, '#',  '', ', ', 'array2d'));
+        this.$('.copy2dArrayPoundQ').addEventListener('click', e => this.copyAs(e, '#', '"', ', ', 'array2d'));
+        this.$('.copyVisualGrid').addEventListener('click', e =>    this.copyAs(e, '#',  '', ' ',  'visualGrid'));
     }
 
     render() {
@@ -34,6 +39,23 @@ class ModeCopyController extends View{
         });
         this.gradController.el.classList.toggle('hidden', this.activeMode != 'gradient');
         this.gridController.el.classList.toggle('hidden', this.activeMode != 'grid');
+
+        this.renderVisibleCopyButtons();
+    }
+
+    renderVisibleCopyButtons() {
+        [
+            ['.copy0x',            'gradient'],
+            ['.copyPound',         'gradient'],
+            ['.copyPoundQ',        'gradient'],
+            ['.copyPoundNewline',  'gradient'],
+            ['.copy2dArray0x',     'grid'],
+            ['.copy2dArrayPound',  'grid'],
+            ['.copy2dArrayPoundQ', 'grid'],
+            ['.copyVisualGrid',    'grid'],
+        ].forEach(([selector, visibleInMode]) => {
+            this.$(selector).classList.toggle('hidden', this.activeMode != visibleInMode);
+        });
     }
 
     setMode(m) {
@@ -73,16 +95,52 @@ class ModeCopyController extends View{
         this.render();
     }
 
-    copyAs(e, format, quote, separator) {
+    copyAs(e, ...formatArgs) {
         const buttonEl = e.currentTarget;
-        let colors = this.gradController.getColors()
-            .map(c => format + hex(c.r(), c.g(), c.b(), c.a()).slice(1))
-            .map(c => quote + c + quote)
-            .join(separator);
+        const text = this.getCopyText(...formatArgs);
         navigator.permissions.query({name: 'clipboard-write'}).then(
-            _ => navigator.clipboard.writeText(colors).then(
+            _ => navigator.clipboard.writeText(text).then(
                 _ => toastSuccess(buttonEl)
             )
         );
     }
+
+    getCopyText(format, quote, separator, gridFormat) {
+        if(this.activeMode == 'gradient') {
+            return this.gradController.getColors()
+                .map(c => format + hex(c.r(), c.g(), c.b(), c.a()).slice(1))
+                .map(c => quote + c + quote)
+                .join(separator);
+
+        }else if(this.activeMode == 'grid') {
+            let colorStrings = map2d(
+                this.gridController.colorGrid.getDenseColorArray(),
+                (x, y, c) => quote + format + hex(c.r(), c.g(), c.b(), c.a()).slice(1) + quote,
+            );
+
+            if(gridFormat == 'visualGrid') {
+                let maxLenByCol = colorStrings.map(
+                    col => Math.max(...col.map(color => color.length))
+                );
+                colorStrings = map2d(
+                    colorStrings,
+                    (x, y, color) => {
+                        return color + " ".repeat(maxLenByCol[x] - color.length);
+                    }
+                );
+                colorStrings = colorStrings.map(col => col.reverse());
+
+                return transpose(colorStrings)
+                    .map(row => row.join(', ').trim())
+                    .join('\n')
+                    .replace(/( +),/g, ",$1");
+            }else{
+                return '[' + colorStrings.map(col => '[' + col.join(', ') + ']').join(', ') + ']';
+            }
+
+        }else{
+            throw "Unknown active mode."
+        }
+    }
 }
+
