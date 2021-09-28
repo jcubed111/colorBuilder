@@ -95,6 +95,17 @@ class ModeCopyController extends View{
     }
 
     grid2gradient() {
+        // if the color grid spans multiple columns, push a history
+        // element so we don't lose colors
+        const colorXs = this.gridController
+            .colorGrid
+            .getDefinedColors()
+            .map(([x, y, color]) => x)
+            .reduce((set, x) => set.add(x), new Set()); // Where's toSet when you need it
+        if(colorXs.size > 1) {
+            historyController.addNew();
+        }
+        // convert into a gradient using the first column of the grid.
         let gridHeight = this.gridController.colorGrid.height;
         let firstColumnColors = Array(gridHeight).fill(0).map(
             (_, y) => this.gridController.colorGrid.extrapolatedAt(0, y)

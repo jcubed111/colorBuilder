@@ -27,4 +27,4 @@ activeColor.setB(Math.floor(50+Math.random()*150));
 
 // initialize this after setting the default color so
 // it doesn't try to save
-new HistoryController(gradientController, gridController, moveCopyController);
+let historyController = new HistoryController(gradientController, gridController, moveCopyController);
