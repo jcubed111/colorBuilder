@@ -107,7 +107,7 @@ class GradientController extends View{
 
 class GradientSwatch extends View {
     el() {
-        return document.importNode(document.getElementById('gradientSwatch').content, true).children[0];
+        return View.fromTemplate('gradientSwatch');
     }
 
     constructor(parent, color) {

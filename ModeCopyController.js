@@ -121,8 +121,6 @@ class ModeCopyController extends View{
         }
 
         this.gridController.resetTo(
-            2,
-            gridHeight,
             [gradColors, Array(gridHeight).fill(null)],
         );
 

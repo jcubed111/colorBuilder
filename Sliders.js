@@ -1,6 +1,6 @@
 class RGBSlider extends View{
     el() {
-        return document.importNode(document.getElementById('sliderTemplate').content, true).children[0];
+        return View.fromTemplate('sliderTemplate');
     }
 
     max() {

@@ -12,4 +12,8 @@ class View extends Model{
     remove() {
         this.el.remove();
     }
+
+    static fromTemplate(templateId) {
+        return document.importNode(document.getElementById(templateId).content, true).children[0];
+    }
 }

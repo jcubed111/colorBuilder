@@ -551,6 +551,7 @@ input{
         position: absolute;
         margin-left: -$radius;
         margin-bottom: -$radius;
+        z-index: 2;
 
         background-image: url(checkers.png);
         background-position: center center;
@@ -596,6 +597,51 @@ input{
         border-color: transparent;
 
         &.unlocked{ opacity: 0; }
+    }
+
+    .gridRowControl, .gridGapControl{
+        position: absolute;
+        width: 40px;
+        height: 40px;
+        background: #18181800;
+        border-radius: 5px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        opacity: 0;
+        transition: all linear 0.05s;
+
+        &:hover{
+            background: #181818;
+        }
+
+        .delete, .add{
+            font-size: 20px;
+            color: #fff3;
+            cursor: pointer;
+        }
+    }
+
+    &:hover .gridRowControl, &:hover .gridGapControl{
+        opacity: 1;
+    }
+
+    .gridRowControl.horizontal{
+        right: -68px;
+        margin-bottom: -20px;
+    }
+    .gridRowControl.vertical{
+        bottom: -68px;
+        margin-left: -20px;
+    }
+
+    .gridGapControl.horizontal{
+        left: -68px;
+        margin-bottom: -20px;
+    }
+    .gridGapControl.vertical{
+        top: -68px;
+        margin-left: -20px;
     }
 }
 

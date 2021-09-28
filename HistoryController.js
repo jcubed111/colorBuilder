@@ -44,7 +44,7 @@ class HistoryItem{
 
     populateGridNullValues(gridColors) {
         let grid = new ColorGrid();
-        grid.resetTo(gridColors.length, gridColors[0].length, map2d(gridColors,
+        grid.resetTo(map2d(gridColors,
             c => c == null ? null : (parseColor(c) || null)
         ));
         return grid.getDenseColorArray();
@@ -167,11 +167,7 @@ class HistoryController extends View{
                     this.history[0].grad,
                     c => c == null ? null : (parseColor(c) || null),
                 );
-                this.gridController.resetTo(
-                    newColors.length,
-                    newColors[0].length,
-                    newColors,
-                );
+                this.gridController.resetTo(newColors);
             }else{
                 moveCopyController.setModeSilent('gradient');
                 let newColors = this.history[0].grad.map(c => parseColor(c));

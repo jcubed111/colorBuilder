@@ -513,6 +513,7 @@ input.invalid {
   position: absolute;
   margin-left: -26px;
   margin-bottom: -26px;
+  z-index: 2;
   background-image: url(checkers.png);
   background-position: center center;
   border: 2px solid #000;
@@ -546,6 +547,45 @@ input.invalid {
 }
 #gridController:not(:hover) .gridSwatch.unlocked {
   opacity: 0;
+}
+#gridController .gridRowControl, #gridController .gridGapControl {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  background: #18181800;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: all linear 0.05s;
+}
+#gridController .gridRowControl:hover, #gridController .gridGapControl:hover {
+  background: #181818;
+}
+#gridController .gridRowControl .delete, #gridController .gridRowControl .add, #gridController .gridGapControl .delete, #gridController .gridGapControl .add {
+  font-size: 20px;
+  color: #fff3;
+  cursor: pointer;
+}
+#gridController:hover .gridRowControl, #gridController:hover .gridGapControl {
+  opacity: 1;
+}
+#gridController .gridRowControl.horizontal {
+  right: -68px;
+  margin-bottom: -20px;
+}
+#gridController .gridRowControl.vertical {
+  bottom: -68px;
+  margin-left: -20px;
+}
+#gridController .gridGapControl.horizontal {
+  left: -68px;
+  margin-bottom: -20px;
+}
+#gridController .gridGapControl.vertical {
+  top: -68px;
+  margin-left: -20px;
 }
 
 #historyView {

@@ -15,17 +15,21 @@ class ColorGrid extends Model{
         return this.colors[mod(x, this.width)][mod(y, this.height)];
     }
 
-    resetTo(width, height, colors) {
-        // colors: Array2d[x, y, Color]
+    getColorArray2d() {
+        return map2d(this.colors, c => c?.clone() ?? null);
+    }
 
+    resetTo(colors) {
+        // colors: Array2d[x, y, Color]
         this.getDefinedColors().forEach(
             ([x, y, color]) => this.stopListeningTo(color)
         );
 
-        this.width = width;
-        this.height = height;
-        this.colors = Array(width).fill(0).map((_, x) =>
-            Array(height).fill(0).map((_, y) =>
+        this.width = colors.length;
+        this.height = colors[0].length;
+
+        this.colors = Array(this.width).fill(0).map((_, x) =>
+            Array(this.height).fill(0).map((_, y) =>
                 colors[x][y]?.clone() || null
             )
         );

@@ -29,11 +29,89 @@ class GridController extends View{
         }
 
         this.subViews.forEach(v => this.$('.elementArea').appendChild(v.el));
+
+        // add grid expansion and deletion buttons
+        if(this.width > 1) { // don't delete the last column
+            for(let x = 0; x < this.width; x++) {
+                this.addRowControl(x, false);
+            }
+        }
+        if(this.height > 1) { // don't delete the last row
+            for(let y = 0; y < this.height; y++) {
+                this.addRowControl(y, true);
+            }
+        }
+        for(let x = 0; x < this.width + 1; x++) {
+            // we adjust to avoid corner elements hitting
+            let adjustedX = x == 0 ? 0.2 : x;
+            this.addGapControl(adjustedX, false);
+        }
+        for(let y = 0; y < this.height + 1; y++) {
+            // we adjust to avoid corner elements hitting
+            let adjustedY = y == this.height ? y - 0.2 : y;
+            this.addGapControl(adjustedY, true);
+        }
+    }
+
+    _setupRowGapEl(el, index, visualIndex, isHorizontal) {
+        el.classList.toggle('horizontal', isHorizontal);
+        el.classList.toggle('vertical', !isHorizontal);
+        el.style[isHorizontal ? 'bottom' : 'left'] = `${visualIndex}em`;
+        this.$('.elementArea').appendChild(el);
+    }
+
+    addRowControl(index, isHorizontal) {
+        const el = View.fromTemplate('gridRowControl');
+        this._setupRowGapEl(el, index, index, isHorizontal);
+        el.addEventListener('click', e => {
+            if(isHorizontal) {
+                this.removeRowAt(index);
+            }else{
+                this.removeColumnAt(index);
+            }
+            e.stopPropagation();
+        });
+    }
+
+    addGapControl(index, isHorizontal) {
+        const el = View.fromTemplate('gridGapControl');
+        this._setupRowGapEl(el, index, index - 0.5, isHorizontal);
+        el.addEventListener('click', e => {
+            if(isHorizontal) {
+                this.addRowBefore(index);
+            }else{
+                this.addColumnBefore(index);
+            }
+            e.stopPropagation();
+        });
     }
 
     resetTo(...args) {
         this.colorGrid.resetTo(...args);
         this.ensureActiveColor();
+    }
+
+    removeRowAt(i) {
+        if(this.height < 2) return;
+        let colors = this.colorGrid.getColorArray2d();
+        colors.forEach(col => col.splice(i, 1));
+        this.resetTo(colors);
+    }
+    removeColumnAt(i) {
+        if(this.width < 2) return;
+        let colors = this.colorGrid.getColorArray2d();
+        colors.splice(i, 1);
+        this.resetTo(colors);
+    }
+    addRowBefore(i) {
+        let colors = this.colorGrid.getColorArray2d();
+        colors.forEach(col => col.splice(i, 0, null));
+        this.resetTo(colors);
+    }
+    addColumnBefore(i) {
+        let colors = this.colorGrid.getColorArray2d();
+        colors.splice(i, 0, colors[0].map(_ => null));
+        this.resetTo(colors);
     }
 
     ensureActiveColor() {
@@ -80,7 +158,7 @@ class GridController extends View{
 
 class GridSwatchController extends View{
     el() {
-        return document.importNode(document.getElementById('gridSwatch').content, true).children[0];
+        return View.fromTemplate('gridSwatch');
     }
 
     constructor([x, y], colorGrid, colorPointer) {
