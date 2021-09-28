@@ -571,7 +571,7 @@ input.invalid {
   bottom: 10px;
 }
 
-#previewCanvas {
+#previewCanvasCtx, #previewCanvasGl {
   position: absolute;
   top: 0;
   left: 0;

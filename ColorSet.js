@@ -28,7 +28,7 @@ class ColorSet{
             mixColors(c_00, c_10, x % 1),
             mixColors(c_01, c_11, x % 1),
             y % 1
-        ).toString();
+        );
     }
 
     map(...args) {
