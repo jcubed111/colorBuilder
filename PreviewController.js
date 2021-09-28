@@ -5,8 +5,6 @@ class PreviewController{
 
         this.modeCopyController = modeCopyController;
         this.previewMode = 'smooth';
-
-        window.addEventListener('resize', _ => this.render());
     }
 
     setMode(m, colorSet) {
@@ -35,11 +33,18 @@ class PreviewController{
         this.ctxCanvas.getContext('2d').clearRect(0, 0, innerWidth, innerHeight);
     }
 
+    getVisibleXBounds() {
+        // returns the x bounds that can reasonably be described as
+        // visible on a "typical" (aka my) screen. Excludes areas covered
+        // by other editor elements.
+        return [200 / innerWidth, 1.0 - (360 / innerWidth)];
+    }
+
     render_smooth(colorSet) {
         if(colorSet.isGridSource()) {
             this.useGl();
             const renderer = new GridRenderer(colorSet, this.glCanvas);
-            renderer.render(200 / innerWidth, 1.0 - (360 / innerWidth));
+            renderer.render(...this.getVisibleXBounds());
         }else{
             this.useCtx();
             this.clearCanvas();
@@ -50,13 +55,32 @@ class PreviewController{
     }
 
     render_bars(colorSet) {
-        // TODO: better results for grid mode
         this.useCtx();
         this.clearCanvas();
-        this.ctxCanvas.style.backgroundImage = colorsToBgImage(
-            colorSet.map(v => v.toString()),
-            false,
-        );
+
+        if(colorSet.isGridSource()) {
+            const ctx = this.ctxCanvas.getContext('2d');
+            const [screenX0, screenX1] = this.getVisibleXBounds().map(v => v * innerWidth);
+            const blockX = (screenX1 - screenX0) / colorSet.width;
+            const blockY = innerHeight / colorSet.height;
+
+            colorSet.forEach((color, x, y) => {
+                const x0 = Math.round((x == 0) ? 0 : screenX0 + x * blockX);
+                const x1 = Math.round((x == colorSet.width - 1) ? innerWidth : screenX0 + (x + 1) * blockX);
+                const y0 = Math.round(y * blockY);
+                const y1 = Math.round((y + 1) * blockY);
+                ctx.fillStyle = color.toString();
+                ctx.fillRect(
+                    x0, innerHeight - y1,
+                    (x1 - x0), (y1 - y0),
+                );
+            });
+        }else{
+            this.ctxCanvas.style.backgroundImage = colorsToBgImage(
+                colorSet.map(v => v.toString()),
+                false,
+            );
+        }
     }
 
     render_swatches(colorSet) {

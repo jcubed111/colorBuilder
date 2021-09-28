@@ -32,12 +32,20 @@ class ModeCopyController extends View{
 
         gradController.onChange(e => {
             if(this.activeMode == 'gradient') {
-                this.previewController.render(gradController.toColorSet())
+                this.previewController.render(gradController.toColorSet());
             }
         });
         gridController.colorGrid.onChange(e => {
             if(this.activeMode == 'grid') {
-                this.previewController.render(gridController.colorGrid.toColorSet())
+                this.previewController.render(gridController.colorGrid.toColorSet());
+            }
+        });
+
+        window.addEventListener('resize', _ => {
+            if(this.activeMode == 'grid') {
+                this.previewController.render(gridController.colorGrid.toColorSet());
+            }else{
+                this.previewController.render(gradController.toColorSet());
             }
         });
     }

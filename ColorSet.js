@@ -34,4 +34,8 @@ class ColorSet{
     map(...args) {
         return this.asList().map(...args);
     }
+
+    forEach(...args) {
+        return map2d(this.colorArray2d, ...args);
+    }
 }
