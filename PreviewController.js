@@ -101,11 +101,43 @@ class PreviewController{
         this.useCtx();
         let ctx = this.ctxCanvas.getContext('2d');
         const size = 53;
-        for(let x=0; x < window.innerWidth; x += size) {
-            for(let y=0; y < window.innerHeight; y += size) {
-                ctx.fillStyle = colorSet.at(Math.random(), Math.random());
-                ctx.fillRect(x, y, size, size);
-            }
+
+        const xGenerator = new RandBin(11);
+
+        function drawBand(x, dx) {
+            const xRand = xGenerator.randDouble(0, 1);
+            const middle = Math.random() ** 2;
+
+            let y = 0;
+            randSegments(window.innerHeight / 25).forEach(dy => {
+                let idealPos = Math.min(
+                    y / middle,
+                    1.0 + (middle - y) / (1 - middle),
+                );
+                let actualPos = clamp(idealPos + rand(-0.2, 0.2), 0.0, 1.0);
+
+                ctx.fillStyle = colorSet.at(xRand, actualPos);
+                ctx.fillRect(x, Math.round(y * innerHeight), dx, Math.round(dy * innerHeight + 1));
+                y += dy;
+            });
+        }
+
+        function drawGutter(x, dx) {
+            const xRand = xGenerator.randDouble(0, 1);
+            ctx.fillStyle = colorSet.at(xRand, Math.random() * 0.1);
+            ctx.fillRect(x, 0, dx, innerHeight);
+        }
+
+        let x = 0;
+        while(x < window.innerWidth) {
+            [randInt(20, 80), 2].forEach((dx, i) => {
+                if(i == 0) {
+                    drawBand(x, dx);
+                }else{
+                    drawGutter(x, dx);
+                }
+                x += dx;
+            });
         }
     }
 }

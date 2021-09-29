@@ -20,6 +20,41 @@ function map2d(arr2d, cb) {
     );
 }
 
+function randInt(a, b) {
+    return Math.floor(a + Math.random() * (b - a));
+}
+
+function rand(a, b) {
+    return a + Math.random() * (b - a);
+}
+
+function randSegments(num, variance = 0.5) {
+    // returns a list of [num] segments, that always add up to 1
+    // if variance is 0, will get perfectly even segments
+    // if variance is 1, will get totally random segments
+    // ex - segments(3, 0.0) => [0.333, 0.333, 0.333]
+    // ex - segments(3, 1.0) => [0.1, 0.5, 0.4]
+    // if num <= 0, returns []
+    if(num <= 0) { return []; }
+
+    const points = [0.0, 1.0];
+    for(let i = 0; i < num - 1; i++) {
+        points.push(Math.random());
+    }
+    points.sort();
+
+    for(let i = 0; i <= num; i++) {
+        const ideal = i / num;
+        points[i] = (points[i] - ideal) * variance + ideal;
+    }
+
+    const result = [];
+    for(let i = 1; i < points.length; i++) {
+        result.push(points[i] - points[i-1]);
+    }
+    return result;
+}
+
 function transpose(arr2d) {
     return arr2d[0].map((_, i) => arr2d.map(arr => arr[i]))
 }
