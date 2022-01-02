@@ -18,7 +18,6 @@ class RGBSlider extends View{
         this._dragging = false;
         this._dontUpdateInput = false;
 
-        this.$topper = this.$('.topper');
         this.$numberInput = this.$('.numberBox');
         this.$sliderOuter = this.$('.sliderOuter');
         this.$sliderInner = this.$('.sliderInner');
@@ -138,7 +137,6 @@ class RedSlider extends RGBSlider{
     setValue(v) { this.targetColor.setR(v); }
 
     setBackgrounds() {
-        this.$topper.style.background = rgb(this.getValue(), 0, 0);
         this.$sliderInner.style.background = `linear-gradient(${rgb(255, this.targetColor.g(), this.targetColor.b())}, ${rgb(0, this.targetColor.g(), this.targetColor.b())})`;
     }
 }
@@ -148,7 +146,6 @@ class GreenSlider extends RGBSlider{
     setValue(v) { this.targetColor.setG(v); }
 
     setBackgrounds() {
-        this.$topper.style.background = rgb(0, this.getValue(), 0);
         this.$sliderInner.style.background = `linear-gradient(${rgb(this.targetColor.r(), 255, this.targetColor.b())}, ${rgb(this.targetColor.r(), 0, this.targetColor.b())})`;
     }
 }
@@ -158,7 +155,6 @@ class BlueSlider extends RGBSlider{
     setValue(v) { this.targetColor.setB(v); }
 
     setBackgrounds() {
-        this.$topper.style.background = rgb(0, 0, this.getValue());
         this.$sliderInner.style.background = `linear-gradient(${rgb(this.targetColor.r(), this.targetColor.g(), 255)}, ${rgb(this.targetColor.r(), this.targetColor.g(), 0)})`;
     }
 }
@@ -168,7 +164,6 @@ class AlphaSlider extends RGBSlider{
     setValue(v) { this.targetColor.setA(v); }
 
     setBackgrounds() {
-        this.$topper.style.background = rgb(this.targetColor.r(), this.targetColor.g(), this.targetColor.b(), this.getValue());
         this.$sliderInner.style.background = `linear-gradient(${rgb(this.targetColor.r(), this.targetColor.g(), this.targetColor.b(), 255)}, ${rgb(this.targetColor.r(), this.targetColor.g(), this.targetColor.b(), 0)}), url(checkers.png)`;
     }
 }
@@ -185,7 +180,6 @@ class HueSlider extends RGBSlider{
     }
 
     setBackgrounds() {
-        this.$topper.style.background = hsv(this.getValue(), 100, 100);
         let g = `linear-gradient(to top,
             ${hsv(0, this.targetColor.s(), this.targetColor.v())}   0.00000%,
             ${hsv(60, this.targetColor.s(), this.targetColor.v())}  16.66667%,
@@ -205,7 +199,6 @@ class SatSlider extends RGBSlider{
     setValue(v) { this.targetColor.setS(v); }
 
     setBackgrounds() {
-        this.$topper.style.background = hsv(this.targetColor.h(), this.getValue(), this.targetColor.v());
         let g = `linear-gradient(
             ${hsv(this.targetColor.h(), 100, this.targetColor.v())},
             ${hsv(this.targetColor.h(), 0, this.targetColor.v())}
@@ -220,7 +213,6 @@ class ValSlider extends RGBSlider{
     setValue(v) { this.targetColor.setV(v); }
 
     setBackgrounds() {
-        this.$topper.style.background = hsv(0, 0, this.getValue());
         let g = `linear-gradient(
             ${hsv(this.targetColor.h(), this.targetColor.s(), 100)},
             ${hsv(this.targetColor.h(), this.targetColor.s(), 0)}
