@@ -77,9 +77,24 @@ class RGBSlider extends View{
         });
     }
 
+    normalizeWheelAmount(event) {
+        if(navigator.appVersion.indexOf("Mac") != -1) {
+            // This checks if the event came from a mouse scroll wheel
+            // instead of a trackpad. Idk if this works on all systems
+            // or just mine :shrug: If it did, reverse it and clamp it.
+            if(event.wheelDelta % 120 == 0) {
+                return -Math.sign(event.wheelDelta);
+            }else{
+                return Math.round(event.deltaY);
+            }
+        }else{
+            return -Math.sign(event.deltaY);
+        }
+    }
+
     wheel(e, value=0) {
         e.preventDefault();
-        const v = value || -Math.sign(e.deltaY);
+        const v = value || this.normalizeWheelAmount(e);
         this._setValue(this.getValue() + v);
     }
 
@@ -165,7 +180,7 @@ class HueSlider extends RGBSlider{
 
     wheel(e, value=0) {
         e.preventDefault();
-        const v = value || -Math.sign(e.deltaY);
+        const v = value || this.normalizeWheelAmount(e);
         this._setValue((this.getValue() + v + 360) % 360);
     }
 
@@ -241,9 +256,17 @@ class SatValSlider extends RGBSlider{
         });
         this.el.addEventListener('wheel', e => {
             e.preventDefault();
-            const v = -Math.sign(e.deltaY);
+            const v = this.normalizeWheelAmount(e);
             let vx = 0, vy = 0;
-            if(e.shiftKey) { vx = -v; } else { vy = v; }
+            if(e.shiftKey) {
+                if(navigator.appVersion.indexOf("Mac")) {
+                    vx = v;
+                }else{
+                    vx = -v;
+                }
+            }else{
+                vy = v;
+            }
             this._setValue(this.getValue()[0] + vx, this.getValue()[1] + vy);
         });
     }
