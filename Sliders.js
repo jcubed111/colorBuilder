@@ -363,9 +363,24 @@ class InputView extends View{
     }
 
     updateView() {
-        this.updateInputIfNotLocked('#hexInput', hex(this.targetColor.r(), this.targetColor.g(), this.targetColor.b(), this.targetColor.a()));
-        this.updateInputIfNotLocked('#rgbInput', prettyRgb(this.targetColor.r(), this.targetColor.g(), this.targetColor.b(), this.targetColor.a(), 3));
-        this.updateInputIfNotLocked('#hslInput', prettyHsv(this.targetColor.h(), this.targetColor.s(), this.targetColor.v(), this.targetColor.a()));
+        this.updateInputIfNotLocked('#hexInput', hex(
+            this.targetColor.r(),
+            this.targetColor.g(),
+            this.targetColor.b(),
+            this.targetColor.a(),
+        ));
+        this.updateInputIfNotLocked('#rgbInput', prettyRgb(
+            this.targetColor.r(),
+            this.targetColor.g(),
+            this.targetColor.b(),
+            this.targetColor.a(),
+        ));
+        this.updateInputIfNotLocked('#hslInput', prettyHsv(
+            this.targetColor.h(),
+            this.targetColor.s(),
+            this.targetColor.v(),
+            this.targetColor.a(),
+        ));
     }
 
     updateInputIfNotLocked(selector, colorString) {
