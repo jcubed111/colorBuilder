@@ -1,0 +1,53 @@
+@import '../globals.module.scss';
+
+.satValSlider{
+    @extend %sliderBlock;
+    display: flex;
+    padding: 16px;
+
+    .sliderInner{
+        position: relative;
+        border: 1px solid #000;
+        background-image: linear-gradient(#0000, #000), linear-gradient(to right, #fff, #fff0);
+        // height: 200px;
+        // width: 200px;
+        flex-grow: 1;
+        flex-shrink: 1;
+    }
+
+    .sliderMarker{
+        position: absolute;
+        width: 2px;
+        height: 2px;
+        margin-bottom: -1px;
+        margin-left: -1px;
+
+        border-color: #fff;
+
+        $crossHairRadius: 6px;
+        $crossHairMargin: 2px;
+
+        &:before{
+            content: '';
+            position: absolute;
+            top: 0;
+            left: - $crossHairRadius - $crossHairMargin;
+            width: 2px + 2*$crossHairMargin;
+            height: 2px;
+            border-left: $crossHairRadius solid #fff;
+            border-right: $crossHairRadius solid #fff;
+            border-color: inherit;
+        }
+        &:after{
+            content: '';
+            position: absolute;
+            top: - $crossHairRadius - $crossHairMargin;
+            left: 0;
+            width: 2px;
+            height: 2px + 2*$crossHairMargin;
+            border-top: $crossHairRadius solid #fff;
+            border-bottom: $crossHairRadius solid #fff;
+            border-color: inherit;
+        }
+    }
+}

@@ -1,0 +1,73 @@
+.controlGroup{
+    display: flex;
+    flex-direction: row;
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid #000;
+    &:not(:last-child) {
+        margin-bottom: 5px;
+    }
+
+    input{
+        border: 0px none!important;
+        flex-grow: 1;
+    }
+
+    %buttonStyle{
+        background: #333;
+        color: #aaa;
+        font-size: 20px;
+        text-align: center;
+        cursor: pointer;
+        min-width: 34px;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding-bottom: 1px;
+    }
+
+    .copyButton{
+        @extend %buttonStyle;
+        position: relative;
+
+        &:not(:first-child) {
+            border-left: 1px solid #000;
+        }
+
+        &:hover{
+            background: #555;
+        }
+
+        &:active{
+            background: #181818;
+        }
+
+        &.active{
+            background: #999;
+            color: #000;
+        }
+
+        .desc{
+            padding-left: 1ch;
+            font-size: 85%;
+            display: inline-block;
+            height: 18px;
+        }
+
+        .buttonSuccessToast{
+            @extend %buttonStyle;
+            position: absolute;
+            z-index: 1;
+            inset: 0;
+            background: #555;
+            opacity: 1.0;
+
+            &.fade{
+                transition: opacity 0.5s 0.5s;
+                opacity: 0.0;
+            }
+        }
+    }
+}
+

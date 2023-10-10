@@ -1,0 +1,128 @@
+@import '../globals.module.scss';
+
+.slider{
+    @extend %sliderBlock;
+
+    width: 90px;
+    display: flex;
+    flex-direction: column;
+    padding-top: 0;
+    padding-bottom: 0;
+
+    .numberWrapper{
+        border-radius: 4px;
+        overflow: hidden;
+        height: 42px;
+        flex-grow: 0;
+        flex-shrink: 0;
+        border: 1px solid #000;
+        margin-bottom: 5px;
+    }
+
+    .sliderOuter{
+        $vMargin: 12px;
+        padding: $vMargin 0;
+        position: relative;
+        user-select: none;
+
+        .sliderInner{
+            box-sizing: content-box;
+            height: 256px;
+            background: linear-gradient(
+                #000 0%,
+                #000 50%,
+                #888 50%,
+                #888 100%
+            ) top / 2px 2px;
+            border: 1px solid #000;
+            border-radius: 3px;
+            position: relative;
+        }
+
+        .sliderMarker{
+            box-sizing: content-box;
+            position: absolute;
+            left: 0px;
+            right: 0px;
+            margin-bottom: -7px;
+            height: 1px;
+            border: 7px solid #000;
+            background: transparent;
+            border-top-color: transparent;
+            border-bottom-color: transparent;
+
+            &:before{
+                content: '';
+                position: absolute;
+                inset: -6px -7px;
+                border: 6px solid #ccc;
+                border-top-color: transparent;
+                border-bottom-color: transparent;
+            }
+        }
+    }
+
+    .arrowUp, .arrowDown{
+        padding: 10px 3px 0;
+        line-height: 0;
+        flex-grow: 1;
+        flex-shrink: 1;
+        background: #333;
+        color: #aaa;
+        font-size: 14px;
+        text-align: center;
+        cursor: pointer;
+        user-select: none;
+
+        &:hover{
+            background: #555;
+        }
+
+        &:active{
+            background: #181818;
+        }
+    }
+
+    .numberWrapper{
+        display: flex;
+
+        .numberBox{
+            border: 0px none;
+            width: 0px;
+            flex-shrink: 1;
+            flex-grow: 1;
+            padding-right: 0;
+        }
+
+        .arrowWrapper{
+            display: flex;
+            flex-direction: column;
+            border-left: 1px solid #000;
+        }
+
+        .arrowUp{
+            border-bottom: 1px solid #000;
+        }
+    }
+
+    .loneArrowWrapper{
+        display: flex;
+        flex-direction: row;
+        border: 1px solid #000;
+        margin-bottom: 5px;
+        border-radius: 4px;
+        overflow: hidden;
+        height: 18px;
+
+        .arrowUp, .arrowDown{
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .arrowDown{
+            border-left: 1px solid #000;
+        }
+    }
+}

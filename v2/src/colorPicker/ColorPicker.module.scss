@@ -1,0 +1,67 @@
+@import '../globals.module.scss';
+
+.sliderArea{
+    display: grid;
+    grid-template-rows: auto 1fr auto auto auto;
+    justify-content: right;
+
+    [data-name=Hue]{
+        grid-column: 5 / 6;
+        grid-row: 1 / 4;
+    }
+    [data-name=Sat]{
+        grid-column: 3 / 4;
+        grid-row: 3 / 4;
+    }
+    [data-name=Val]{
+        grid-column: 4 / 5;
+        grid-row: 3 / 4;
+    }
+    [data-name=Red]{
+        grid-column: 2 / 3;
+        grid-row: 4 / 5;
+    }
+    [data-name=Green]{
+        grid-column: 3 / 4;
+        grid-row: 4 / 5;
+    }
+    [data-name=Blue]{
+        grid-column: 4 / 5;
+        grid-row: 4 / 5;
+    }
+    [data-name=Alpha]{
+        grid-column: 5 / 6;
+        grid-row: 4 / 5;
+    }
+    [data-name=SatVal]{
+        grid-column: 2 / 5;
+        grid-row: 1 / 3;
+    }
+    .colorDisplay{
+        grid-column: 2 / 3;
+        grid-row: 3 / 4;
+
+        @extend %sliderBlock;
+        display: flex;
+
+        .inner{
+            display: flex;
+            flex-direction: column;
+            border-radius: 4px;
+            overflow: hidden;
+            border: 1px solid #000;
+            background: $checkers;
+            flex-grow: 1;
+
+            .solid, .alpha{
+                flex-grow: 1;
+            }
+        }
+    }
+    .mainInput{
+        @extend %sliderBlock;
+
+        grid-column: 2 / 6;
+        grid-row: 5 / 6;
+    }
+}
