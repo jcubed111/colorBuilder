@@ -40,7 +40,7 @@ export function Slider({
             if(event.wheelDelta % 120 == 0) {
                 applyDelta(-Math.sign(event.wheelDelta));
             }else{
-                applyDelta(Math.round(event.deltaY / 2));
+                applyDelta(event.deltaY);
             }
         }else{
             applyDelta(-Math.sign(event.deltaY));

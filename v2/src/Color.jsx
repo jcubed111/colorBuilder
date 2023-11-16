@@ -303,4 +303,22 @@ export class Color{
         // return a contrasting color for text on top of this color
         return this.isDark() ? '#fff' : '#000';
     }
+
+    lerp(colorB, f) {
+        // return linear iterpolation of this -> colorB at f
+        if(f <= 0) {
+            return new Color(this);
+        }else if(f >= 1) {
+            return new Color(colorB);
+        }else{
+            const a = this._valueAsRgb();
+            const b = colorB._valueAsRgb();
+            return new Color({
+                r: c255(Math.round(a.r * (1 - f) + b.r * f)),
+                g: c255(Math.round(a.g * (1 - f) + b.g * f)),
+                b: c255(Math.round(a.b * (1 - f) + b.b * f)),
+                a: c255(Math.round(a.a * (1 - f) + b.a * f)),
+            });
+        }
+    }
 }

@@ -1,0 +1,143 @@
+
+%expanderHoverBack{
+    &:before{
+        content: '';
+        position: absolute;
+        top: 50%;
+        bottom: 50%;
+        left: 0;
+        right: 0;
+        background: #181818;
+        transition: top ease-in 0.15s, bottom ease-in 0.15s;
+        border-radius: 5px;
+        z-index: -1;
+    }
+
+    &:hover:before{
+        top: 0px;
+        bottom: 0px;
+        transition: top ease-out 0.15s, bottom ease-out 0.15s;
+    }
+}
+
+.gradientView{
+    display: flex;
+    flex-direction: column;
+    width: 150px;
+    background: #181818;
+    justify-content: center;
+
+    $buttonR: 1em;
+
+    font-size: 1.3rem;
+
+    .swatch{
+        flex-grow: 0;
+        flex-shrink: 1;
+        border-radius: 10px;
+        position: relative;
+        height: 150px;
+
+        .addButton.before{
+            inset: auto auto 100% 50%;
+            margin-bottom: -$buttonR;
+            margin-left: -$buttonR;
+        }
+        .addButton.after{
+            inset: 100% auto auto 50%;
+            margin-top: -$buttonR;
+            margin-left: -$buttonR;
+        }
+        .removeButton{
+            inset: auto auto 50% 100%;
+            margin-left: -$buttonR;
+            margin-bottom: -$buttonR;
+        }
+        .duplicateButton{
+            inset: auto 100% 50% auto;
+            margin-right: -$buttonR;
+            margin-bottom: -$buttonR;
+        }
+
+        .activeIndicator{
+            padding: 0.5em;
+        }
+    }
+
+    .button{
+        color: #fff6;
+        position: absolute;
+        height: 2 * $buttonR;
+        width: 2 * $buttonR;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 3;
+        cursor: pointer;
+        transition: opacity 0.2s, color 0.2s;
+
+        &:hover{
+            color: #fffc;
+        }
+
+        @extend %expanderHoverBack;
+    }
+
+    // Hover states
+    .swatch{
+        .addButton.before{ opacity: 0; }
+        .addButton.after{ opacity: 0; }
+        .removeButton{ opacity: 0; }
+        .duplicateButton{ opacity: 0; }
+    }
+    .swatch:hover{
+        .addButton.before{ opacity: 1; }
+        .addButton.after{ opacity: 1; }
+        .removeButton{ opacity: 1; }
+        .duplicateButton{ opacity: 1; }
+    }
+    .swatch:hover+.swatch{
+        .addButton.before{ opacity: 1; }
+    }
+
+    .addButton{
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        width: auto;
+
+        &:hover{
+            color: #fff6;
+        }
+
+        &:before{
+            background: #333;
+        }
+        // Add values expand as you hover further
+        .addValueBlock{
+            flex-shrink: 0;
+            display: none;
+
+            .inner{
+                display: flex;
+                width: 2 * $buttonR;
+                height: 2 * $buttonR;
+                justify-content: center;
+                align-items: center;
+                border-radius: 5px;
+                position: relative;
+                &:hover{
+                    background: #181818;
+                    color: #fffc;
+                }
+                @extend %expanderHoverBack;
+            }
+        }
+
+        .addValueBlock:first-child,
+        .addValueBlock:hover,
+        .addValueBlock:hover>.addValueBlock{
+            display: flex;
+        }
+    }
+}
