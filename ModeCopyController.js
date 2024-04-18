@@ -144,7 +144,10 @@ class ModeCopyController extends View{
         navigator.permissions.query({name: 'clipboard-write'}).then(
             _ => navigator.clipboard.writeText(text).then(
                 _ => toastSuccess(buttonEl)
-            )
+            ),
+            _ => navigator.clipboard.writeText(text).then(
+                _ => toastSuccess(buttonEl)
+            ),
         );
     }
 

@@ -181,7 +181,13 @@ class HistoryController extends View{
     async pasteList() {
         // TODO: auto detect grids
 
-        let v = await navigator.clipboard.readText();
+        let v;
+        if(navigator.clipboard.readText === undefined) {
+            v = prompt();
+            if(v === null) return;
+        }else{
+            v = await navigator.clipboard.readText();
+        }
         console.log(v);
         let colorList = parseList(v);
         if(colorList.length < 1) return;

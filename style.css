@@ -281,7 +281,7 @@ input.invalid {
   right: 0;
   top: 0;
   bottom: 0;
-  background-image: linear-gradient(#0000, #000), linear-gradient(to right, #fff, #fff0);
+  background-image: linear-gradient(rgba(0, 0, 0, 0), #000), linear-gradient(to right, #fff, rgba(255, 255, 255, 0));
   background-color: #f00;
 }
 #satValSlider .sliderOuter .sliderMarker {
@@ -368,7 +368,7 @@ input.invalid {
   z-index: 3;
   padding: 8px;
   font-size: 23px;
-  color: #fff0;
+  color: rgba(255, 255, 255, 0);
   transition: color 0.2s;
 }
 #gradientController .gradientSwatch .addBefore:hover,
@@ -376,7 +376,7 @@ input.invalid {
 #gradientController .gradientSwatch .addMultiBefore:hover,
 #gradientController .gradientSwatch .duplicate:hover,
 #gradientController .gradientSwatch .delete:hover {
-  color: #ffff;
+  color: white;
 }
 #gradientController .gradientSwatch .addBefore:before,
 #gradientController .gradientSwatch .addAfter:before,
@@ -404,7 +404,7 @@ input.invalid {
   transition: top ease-out 0.15s, bottom ease-out 0.15s;
 }
 #gradientController .gradientSwatch:hover .addBefore, #gradientController .gradientSwatch:hover .addAfter, #gradientController .gradientSwatch:hover .addMultiBefore, #gradientController .gradientSwatch:hover .duplicate, #gradientController .gradientSwatch:hover .delete {
-  color: #fff3;
+  color: rgba(255, 255, 255, 0.2);
 }
 #gradientController .gradientSwatch .addBefore, #gradientController .gradientSwatch .addMultiBefore {
   top: -20px;
@@ -455,11 +455,11 @@ input.invalid {
 }
 
 #gradientController .gradientSwatch:hover + .gradientSwatch .addBefore {
-  color: #fff3;
+  color: rgba(255, 255, 255, 0.2);
 }
 
 #gradientController .gradientSwatch:hover + .gradientSwatch .addMultiBefore {
-  color: #fff3;
+  color: rgba(255, 255, 255, 0.2);
 }
 
 #gridControllerWrapper {
@@ -544,7 +544,7 @@ input.invalid {
   position: absolute;
   width: 40px;
   height: 40px;
-  background: #18181800;
+  background: rgba(24, 24, 24, 0);
   border-radius: 5px;
   display: flex;
   justify-content: center;
@@ -557,7 +557,7 @@ input.invalid {
 }
 #gridController .gridRowControl .delete, #gridController .gridRowControl .add, #gridController .gridGapControl .delete, #gridController .gridGapControl .add {
   font-size: 20px;
-  color: #fff3;
+  color: rgba(255, 255, 255, 0.2);
   cursor: pointer;
 }
 #gridController:hover .gridRowControl, #gridController:hover .gridGapControl {
