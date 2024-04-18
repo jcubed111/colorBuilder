@@ -357,11 +357,14 @@ class InputView extends View{
             });
         });
         this.el.querySelectorAll('.pasteButton').forEach(el => el.addEventListener('click', async e => {
-            // this.$(`#hexInput`).select();
-            // document.execCommand("paste");
-            let v = await navigator.clipboard.readText();
-            console.log(v);
-            this.parseAndSet(v);
+            if(navigator.clipboard.readText === undefined) {
+                const v = prompt();
+                if(v === null) return;
+                this.parseAndSet(v);
+            }else{
+                let v = await navigator.clipboard.readText();
+                this.parseAndSet(v);
+            }
         }));
     }
 

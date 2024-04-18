@@ -260,6 +260,22 @@ input{
                 opacity: 0.0;
             }
         }
+
+        // &.copyButton:after{
+        //     content: 'c';
+        // }
+        // &.pasteButton:after{
+        //     content: 'p';
+        // }
+        // &.copyButton:after, &.pasteButton:after{
+        //     position: absolute;
+        //     inset: 0;
+        //     text-shadow:
+        //         2px 0 #333,
+        //         -2px 0 #333,
+        //         0 2px #333,
+        //         0 -2px #333;
+        // }
     }
 }
 
